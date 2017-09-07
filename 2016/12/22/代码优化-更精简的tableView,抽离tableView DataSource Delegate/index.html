@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <link rel="dns-prefetch" href="http://yoursite.com">
+  <title>代码优化-更精简的tableView,抽离tableView DataSource Delegate | blog with sandsyu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前言
+
+　　UITableView无疑是我们在开发iOS应用中使用频率非常高的一个控件,使用方法无外乎创建对象,关联delegate,datasource,实现对应方法.
+　　几乎是在每一次使用UITableView的时候,都会去调用几个固定的方法,例如
+12345678//返回数量- (NSInteger)tableView:(UITableView *)tableView numberOfR">
+<meta property="og:type" content="article">
+<meta property="og:title" content="代码优化-更精简的tableView,抽离tableView DataSource Delegate">
+<meta property="og:url" content="http://yoursite.com/2016/12/22/代码优化-更精简的tableView,抽离tableView DataSource Delegate/index.html">
+<meta property="og:site_name" content="blog with sandsyu">
+<meta property="og:description" content="前言
+
+　　UITableView无疑是我们在开发iOS应用中使用频率非常高的一个控件,使用方法无外乎创建对象,关联delegate,datasource,实现对应方法.
+　　几乎是在每一次使用UITableView的时候,都会去调用几个固定的方法,例如
+12345678//返回数量- (NSInteger)tableView:(UITableView *)tableView numberOfR">
+<meta property="og:updated_time" content="2016-12-22T08:52:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="代码优化-更精简的tableView,抽离tableView DataSource Delegate">
+<meta name="twitter:description" content="前言
+
+　　UITableView无疑是我们在开发iOS应用中使用频率非常高的一个控件,使用方法无外乎创建对象,关联delegate,datasource,实现对应方法.
+　　几乎是在每一次使用UITableView的时候,都会去调用几个固定的方法,例如
+12345678//返回数量- (NSInteger)tableView:(UITableView *)tableView numberOfR">
+  
+    <link rel="alternative" href="/atom.xml" title="blog with sandsyu" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/main.css?v=4.0.0.css">
+  
+
+  
+
+</head>
+
+<body>
+  <div id="container" q-class="show:isCtnShow">
+    <canvas id="anm-canvas" class="anm-canvas"></canvas>
+    <div class="left-col" q-class="show:isShow">
+      <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://oif61bzoy.bkt.clouddn.com/header.png" class="js-avatar">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sandsyu</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">隐约雷鸣 阴霾天空 但盼风雨来 能留你在此.</p>
+		
+
+		<nav class="header-menu">
+			<ul>
+			
+				<li><a href="/">主页</a></li>
+	        
+				<li><a href="/tags/测试/">测试</a></li>
+	        
+				<li><a href="/tags/APP/">移动</a></li>
+	        
+				<li><a href="/tags/服务端/">后端</a></li>
+	        
+			</ul>
+		</nav>
+		<nav class="header-smart-menu">
+	        
+    		
+    			
+    			<a data-idx="0" q-on="click: openSlider(e, 'innerArchive')" href="javascript:void(0)">所有文章</a>
+    			
+    			
+            
+    			
+    			<a data-idx="1" q-on="click: openSlider(e, 'friends')" href="javascript:void(0)">友链</a>
+    			
+    			
+            
+    			
+    			<a data-idx="2" q-on="click: openSlider(e, 'aboutme')" href="javascript:void(0)">关于我</a>
+    			
+    			
+            
+		</nav>
+		<nav class="header-nav">
+			<div class="social">
+				
+					<a class="github" target="_blank" href="https://github.com/yushengchu" title="github"><i class="icon-github"></i></a>
+		        
+					<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
+		        
+					<a class="qq" target="_blank" href="#" title="qq"><i class="icon-qq"></i></a>
+		        
+					<a class="mail" target="_blank" href="mailto:yushengchu@aliyun.com" title="mail"><i class="icon-mail"></i></a>
+		        
+			</div>
+		</nav>
+	</header>		
+</div>
+
+    </div>
+    <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"><i class="icon-sort"></i></div>
+  		<h1 class="header-author js-mobile-header hide">Sandsyu</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://oif61bzoy.bkt.clouddn.com/header.png" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Sandsyu</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">隐约雷鸣 阴霾天空 但盼风雨来 能留你在此.</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/tags/测试/">测试</a></li>
+		        
+					<li><a href="/tags/APP/">移动</a></li>
+		        
+					<li><a href="/tags/服务端/">后端</a></li>
+		        
+		        
+		        	<li><a href="/archives/">所有文章</a></li>
+		        
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/yushengchu" title="github"><i class="icon-github"></i></a>
+			        
+						<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
+			        
+						<a class="qq" target="_blank" href="#" title="qq"><i class="icon-qq"></i></a>
+			        
+						<a class="mail" target="_blank" href="mailto:yushengchu@aliyun.com" title="mail"><i class="icon-mail"></i></a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div id="wrapper" class="body-wrap">
+        <div class="menu-l">
+          <div class="canvas-wrap">
+            <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
+          </div>
+          <div id="js-content" class="content-ll">
+            <article id="post-代码优化-更精简的tableView,抽离tableView DataSource Delegate" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      代码优化-更精简的tableView,抽离tableView DataSource Delegate
+    </h1>
+  
+
+        <a href="/2016/12/22/代码优化-更精简的tableView,抽离tableView DataSource Delegate/" class="archive-article-date">
+  	<time datetime="2016-12-22T08:52:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-22</time>
+</a>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>前言</p>
+</blockquote>
+<p>　　UITableView无疑是我们在开发iOS应用中使用频率非常高的一个控件,使用方法无外乎创建对象,关联delegate,datasource,实现对应方法.</p>
+<p>　　几乎是在每一次使用UITableView的时候,都会去调用几个固定的方法,例如</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//返回数量</span></div><div class="line"><span class="selector-tag">-</span> (NSInteger)<span class="selector-tag">tableView</span><span class="selector-pseudo">:(UITableView</span> *)<span class="selector-tag">tableView</span> <span class="selector-tag">numberOfRowsInSection</span><span class="selector-pseudo">:(NSInteger)section</span>;</div><div class="line"><span class="comment">//返回高度</span></div><div class="line"><span class="selector-tag">-</span> (CGFloat)<span class="selector-tag">tableView</span><span class="selector-pseudo">:(UITableView</span> *)<span class="selector-tag">tableView</span> <span class="selector-tag">heightForRowAtIndexPath</span><span class="selector-pseudo">:(NSIndexPath</span> *)<span class="selector-tag">indexPath</span>;</div><div class="line"><span class="comment">//返回cell实例对象</span></div><div class="line"><span class="selector-tag">-</span> (UITableViewCell *)<span class="selector-tag">tableView</span><span class="selector-pseudo">:(UITableView</span> *)<span class="selector-tag">tableView</span> <span class="selector-tag">cellForRowAtIndexPath</span><span class="selector-pseudo">:(NSIndexPath</span> *)<span class="selector-tag">indexPath</span></div><div class="line"><span class="comment">//cell点击事件</span></div><div class="line"><span class="selector-tag">-</span> (void) <span class="selector-tag">tableView</span><span class="selector-pseudo">:(UITableView</span> *)<span class="selector-tag">tableView</span> <span class="selector-tag">didSelectRowAtIndexPath</span><span class="selector-pseudo">:(NSIndexPath</span> *)<span class="selector-tag">indexPath</span></div></pre></td></tr></table></figure>
+<p>　　这无疑是多了很多重复性质的代码,是否有办法可以简化UITableView的使用,避免这些重复性质的代码,同时能兼容大部分情况UITableView的使用呢?</p>
+<p>　　将UITableView的Deleaget,DataSource抽离出来无疑是一个比较好的办法,实现一个通用的负责代理方法实现的类,通过block来回调,减少VC代码量.<br><a id="more"></a></p>
+<h1 id="代码实例"><a href="#代码实例" class="headerlink" title="代码实例"></a>代码实例</h1><h2 id="通用处理类CustomDeleagte-h"><a href="#通用处理类CustomDeleagte-h" class="headerlink" title="通用处理类CustomDeleagte.h"></a>通用处理类<code>CustomDeleagte.h</code></h2><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#import <span class="meta-string">&lt;Foundation/Foundation.h&gt;</span></span></div><div class="line"><span class="meta">#import <span class="meta-string">&lt;UIKit/UIKit.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="keyword">typedef</span> <span class="keyword">void</span> (^TableViewCellConfigureBlock)(<span class="built_in">NSIndexPath</span>* indexPath, <span class="keyword">id</span> cell, <span class="keyword">id</span> item);</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">void</span> (^TableViewCellDidSelectBlock)(<span class="built_in">NSIndexPath</span>* indexPath, <span class="keyword">id</span> cell, <span class="keyword">id</span> item);</div><div class="line"><span class="keyword">typedef</span> <span class="built_in">CGFloat</span> (^TableViewCellHeightBlock)(<span class="built_in">NSIndexPath</span>* indexPath, <span class="keyword">id</span> item);</div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">CustomDeleagte</span> : <span class="title">NSObject</span> &lt;<span class="title">UITableViewDataSource</span>,<span class="title">UITableViewDelegate</span>&gt;</span></div><div class="line"></div><div class="line">- (<span class="keyword">id</span>)initWithItems:(<span class="built_in">NSArray</span> *)aItems</div><div class="line">     cellIdentifier:(<span class="built_in">NSString</span> *)aIdentifier</div><div class="line"> configureCellBlock:(TableViewCellConfigureBlock)aConfigureCellBlock</div><div class="line">    cellHeightBlock:(TableViewCellHeightBlock)aHeightBlock</div><div class="line">     didSelectBlock:(TableViewCellDidSelectBlock)aDidSelectBlock;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)handleTableViewDataSourceAndDelegate:(<span class="built_in">UITableView</span>*)aTableView;</div><div class="line"></div><div class="line">- (<span class="keyword">id</span>)itemAtIndexPath:(<span class="built_in">NSIndexPath</span> *)indexPath;</div><div class="line"></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>) <span class="built_in">NSArray</span> *items;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<p>1.<code>TableViewCellConfigureBlock</code>用于传入数据源,加载数据<br>2.<code>TableViewCellDidSelectBlock</code>回调点击事件<br>3.<code>TableViewCellHeightBlock</code>计算cell高度</p>
+<p>三个block基本涵盖了UITableView的一般使用.</p>
+<hr>
+<p>通用处理类实现<code>CustomDeleagte.m</code></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#import <span class="meta-string">"CustomDeleagte.h"</span></span></div><div class="line"><span class="meta">#import <span class="meta-string">"UITableViewCell+Extension.h"</span></span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">CustomDeleagte</span>()</span></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>) <span class="built_in">NSString</span>* cellIdentigier;</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>) TableViewCellConfigureBlock configureCellBlock;</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>) TableViewCellDidSelectBlock didSelectBlock;</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>) TableViewCellHeightBlock heightBlock;</div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">CustomDeleagte</span></span></div><div class="line"></div><div class="line">- (<span class="keyword">id</span>)initWithItems:(<span class="built_in">NSArray</span> *)aItems</div><div class="line">     cellIdentifier:(<span class="built_in">NSString</span> *)aIdentifier</div><div class="line"> configureCellBlock:(TableViewCellConfigureBlock)aConfigureCellBlock</div><div class="line">    cellHeightBlock:(TableViewCellHeightBlock)aHeightBlock</div><div class="line">didSelectBlock:(TableViewCellDidSelectBlock)aDidSelectBlock&#123;</div><div class="line">    <span class="keyword">self</span> = [<span class="keyword">super</span> init];</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">self</span>) &#123;</div><div class="line">        <span class="keyword">self</span>.items = aItems;</div><div class="line">        <span class="keyword">self</span>.cellIdentigier = aIdentifier;</div><div class="line">        <span class="keyword">self</span>.configureCellBlock = aConfigureCellBlock;</div><div class="line">        <span class="keyword">self</span>.heightBlock = aHeightBlock;</div><div class="line">        <span class="keyword">self</span>.didSelectBlock = aDidSelectBlock;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">- (<span class="keyword">id</span>)itemAtIndexPath:(<span class="built_in">NSIndexPath</span>*)indexPath&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">self</span>.items[(<span class="built_in">NSUInteger</span>)indexPath.row];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="built_in">NSInteger</span>)tableView:(<span class="built_in">UITableView</span> *)tableView numberOfRowsInSection:(<span class="built_in">NSInteger</span>)section&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">self</span>.items.count;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="built_in">UITableViewCell</span>*)tableView:(<span class="built_in">UITableView</span> *)tableView cellForRowAtIndexPath:(<span class="built_in">NSIndexPath</span> *)indexPath&#123;</div><div class="line">    <span class="built_in">UITableViewCell</span>* cell = [tableView dequeueReusableCellWithIdentifier:<span class="keyword">self</span>.cellIdentigier];</div><div class="line">    <span class="keyword">if</span> (!cell) &#123;</div><div class="line">        [<span class="built_in">UITableViewCell</span> registerTabelView:tableView nibIdentifier:<span class="keyword">self</span>.cellIdentigier];</div><div class="line">        cell = [tableView dequeueReusableCellWithIdentifier:<span class="keyword">self</span>.cellIdentigier];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">id</span> item = [<span class="keyword">self</span> itemAtIndexPath:indexPath];</div><div class="line">    <span class="keyword">self</span>.configureCellBlock(indexPath,cell,item);</div><div class="line">    <span class="keyword">return</span> cell;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)tableView:(<span class="built_in">UITableView</span> *)tableView didSelectRowAtIndexPath:(<span class="built_in">NSIndexPath</span> *)indexPath&#123;</div><div class="line">    <span class="keyword">id</span> item = [<span class="keyword">self</span> itemAtIndexPath:indexPath];</div><div class="line">    <span class="keyword">id</span> cell = [tableView cellForRowAtIndexPath:indexPath];</div><div class="line">    <span class="keyword">self</span>.didSelectBlock(indexPath,cell,item);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//注册delegate,datasource</span></div><div class="line">- (<span class="keyword">void</span>)handleTableViewDataSourceAndDelegate:(<span class="built_in">UITableView</span> *)aTableView&#123;</div><div class="line">    aTableView.delegate = <span class="keyword">self</span>;</div><div class="line">    aTableView.dataSource = <span class="keyword">self</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="built_in">CGFloat</span>)tableView:(<span class="built_in">UITableView</span> *)tableView heightForRowAtIndexPath:(<span class="built_in">NSIndexPath</span> *)indexPath&#123;</div><div class="line">    <span class="keyword">id</span> item = [<span class="keyword">self</span> itemAtIndexPath:indexPath];</div><div class="line">    <span class="keyword">return</span> <span class="keyword">self</span>.heightBlock(indexPath,item);</div><div class="line">&#125;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<hr>
+<p>给UITableViewCell扩展几个方法</p>
+<p><code>UITableViewCell+Extension.h</code></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#import <span class="meta-string">&lt;UIKit/UIKit.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">UITableViewCell</span> (<span class="title">Extension</span>)</span></div><div class="line"></div><div class="line"><span class="comment">//注册cell</span></div><div class="line">+ (<span class="keyword">void</span>)registerTabelView:(<span class="built_in">UITableView</span>*)aTable</div><div class="line">            nibIdentifier:(<span class="built_in">NSString</span>*)identifier;</div><div class="line"></div><div class="line"><span class="comment">//载入数据</span></div><div class="line">- (<span class="keyword">void</span>)configure:(<span class="built_in">UITableViewCell</span>*)aCell</div><div class="line">        custimObj:(<span class="keyword">id</span>)obj</div><div class="line">        indexPath:(<span class="built_in">NSIndexPath</span>*)indexPath;</div><div class="line"></div><div class="line"><span class="comment">//根据数据源计算cell高度 默认返回44.0f</span></div><div class="line">+ (<span class="built_in">CGFloat</span>)getCellHeightWitCustomObj:(<span class="keyword">id</span>)obj</div><div class="line">                           indexPath:(<span class="built_in">NSIndexPath</span>*)indexPath;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<p><code>UITableViewCell+Extension.m</code></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#import <span class="meta-string">"UITableViewCell+Extension.h"</span></span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">UITableViewCell</span> (<span class="title">Extension</span>)</span></div><div class="line"></div><div class="line"><span class="comment">//注册cell</span></div><div class="line">+ (<span class="keyword">void</span>)registerTabelView:(<span class="built_in">UITableView</span>*)aTable</div><div class="line">            nibIdentifier:(<span class="built_in">NSString</span>*)identifier&#123;</div><div class="line">    [aTable registerNib:[<span class="built_in">UINib</span> nibWithNibName:identifier bundle:<span class="literal">nil</span>] forCellReuseIdentifier:identifier];</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//载入数据</span></div><div class="line">- (<span class="keyword">void</span>)configure:(<span class="built_in">UITableViewCell</span>*)aCell</div><div class="line">        custimObj:(<span class="keyword">id</span>)obj</div><div class="line">        indexPath:(<span class="built_in">NSIndexPath</span>*)indexPath&#123;</div><div class="line">    </div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//根据数据源计算cell高度 默认返回44.0f</span></div><div class="line">+ (<span class="built_in">CGFloat</span>)getCellHeightWitCustomObj:(<span class="keyword">id</span>)obj</div><div class="line">                           indexPath:(<span class="built_in">NSIndexPath</span>*)indexPath&#123;</div><div class="line">    <span class="keyword">return</span> <span class="number">44.0</span>f;</div><div class="line">&#125;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<p>在自定义cell的类中重写这两个方法<br><code>configure</code>用于数据加载<br><code>getCellHeightWitCustomObj</code>用于计算高度</p>
+<p><code>registerTabelView</code>方法在CusetDelegate中用于注册cell到对应tableView</p>
+<hr>
+<p>代码中的使用方法</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">self</span>.data = [[<span class="built_in">NSArray</span> alloc]init];</div><div class="line"></div><div class="line"><span class="keyword">self</span>.tab = [[<span class="built_in">UITableView</span> alloc]initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, kScreenWidth, kScreenHeight) style:<span class="built_in">UITableViewStylePlain</span>];</div><div class="line"></div><div class="line">TableViewCellConfigureBlock ConfigBlock = ^(<span class="built_in">NSIndexPath</span>* indexPath,WelfareRuleCell* cell,<span class="keyword">id</span> item)&#123;</div><div class="line">    [cell configure:cell custimObj:item indexPath:indexPath];</div><div class="line">&#125;;</div><div class="line">TableViewCellDidSelectBlock DidBlock = ^(<span class="built_in">NSIndexPath</span>* indexPath,<span class="keyword">id</span> cell,<span class="keyword">id</span> item)&#123;</div><div class="line">    </div><div class="line">&#125;;</div><div class="line">TableViewCellHeightBlock heightBlock = ^<span class="built_in">CGFloat</span>(<span class="built_in">NSIndexPath</span>* indexPath,<span class="keyword">id</span> item)&#123;</div><div class="line">    <span class="keyword">return</span> [WelfareRuleCell getCellHeightWitCustomObj:item indexPath:indexPath];</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">self</span>.customDelegate = [[CustomDeleagte alloc]initWithItems:_data</div><div class="line">                                            cellIdentifier:<span class="string">@"WelfareRuleCell"</span></div><div class="line">                                        configureCellBlock:ConfigBlock</div><div class="line">                                           cellHeightBlock:heightBlock</div><div class="line">                                            didSelectBlock:DidBlock];</div><div class="line">[<span class="keyword">self</span>.customDelegate handleTableViewDataSourceAndDelegate:<span class="keyword">self</span>.tab];</div><div class="line">[<span class="keyword">self</span>.view addSubview:<span class="keyword">self</span>.tab];</div></pre></td></tr></table></figure>
+<p>自定义cell类</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#import <span class="meta-string">"WelfareRuleCell.h"</span></span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">WelfareRuleCell</span></span></div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)awakeFromNib &#123;</div><div class="line">    [<span class="keyword">super</span> awakeFromNib];</div><div class="line">    <span class="comment">// Initialization code</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)configure:(<span class="built_in">UITableViewCell</span> *)aCell custimObj:(<span class="keyword">id</span>)obj indexPath:(<span class="built_in">NSIndexPath</span> *)indexPath&#123;</div><div class="line">    <span class="comment">//数据加载</span></div><div class="line">    <span class="keyword">self</span>.XXX = XXX;</div><div class="line">&#125;</div><div class="line"></div><div class="line">+ (<span class="built_in">CGFloat</span>)getCellHeightWitCustomObj:(<span class="keyword">id</span>)obj indexPath:(<span class="built_in">NSIndexPath</span> *)indexPath&#123;</div><div class="line">    <span class="comment">//计算高度的代码</span></div><div class="line">    <span class="keyword">return</span> xxx;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<h1 id="后语"><a href="#后语" class="headerlink" title="后语"></a>后语</h1><p>　　使用抽离Delegate和DataSource的方法来使用tableView,控制器中的代码可以被大大的简化,代码逻辑也能更清晰</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/APP/">APP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/开发/">开发</a></li></ul>
+	</div>
+
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2016/12/22/代码优化-更精简的tableView,抽离tableView DataSource Delegate/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2016/12/22/代码解耦-iOS应用內动态跳转解决方案 Routable-iOS简单使用 /" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          代码解耦-iOS应用內动态跳转解决方案 Routable-iOS简单使用
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/12/22/iOS实现一个类似readme.io的动效登录界面/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">iOS实现一个类似readme.io的动效登录界面</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+
+
+
+          </div>
+        </div>
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sandsyu
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+    <p class="copyright">本站总访问量 <span id="busuanzi_value_site_pv"></span> 次, 访客数 <span id="busuanzi_value_site_uv"></span> 人次, 本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次</p>
+  </div>
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</footer>
+    </div>
+    <script>
+	var yiliaConfig = {
+		mathjax: false,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: "/",
+		innerArchive: true
+	}
+</script>
+
+<script src="/./main.js?v=4.0.0.js"></script>
+
+
+    
+<div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
+  <div class="tools-wrap">
+    
+    	<section class="tools-section tools-section-all" q-show="innerArchive">
+        <div class="search-wrap">
+          <input class="search-ipt" q-model="search" type="text" placeholder="find something…">
+          <i class="icon-search icon" q-show="search|isEmptyStr"></i>
+          <i class="icon-close icon" q-show="search|isNotEmptyStr" q-on="click:clearChose(e)"></i>
+        </div>
+        <div class="widget tagcloud search-tag">
+          <p class="search-tag-wording">tag:</p>
+          <label class="search-switch">
+            <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
+          </label>
+          <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">Appium</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">unittest</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">iOS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">服务端</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">APP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">移动开发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">开发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">swift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">移动端</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">app</a>
+              </li>
+            
+            <div class="clearfix"></div>
+          </ul>
+        </div>
+        <ul class="search-ul">
+          <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
+            缺失模块。<br/>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            2、在根目录_config.yml里添加配置：
+<pre style="font-size: 12px;" q-show="jsonFail">
+  jsonContent:
+    meta: false
+    pages: false
+    posts:
+      title: true
+      date: true
+      path: true
+      text: true
+      raw: false
+      content: false
+      slug: false
+      updated: false
+      comments: false
+      link: false
+      permalink: false
+      excerpt: false
+      categories: false
+      tags: true
+</pre>
+          </p>
+          <li class="search-li" q-repeat="items" q-show="isShow">
+            <a q-attr="href:path|urlformat" class="search-title"><i class="icon-quo-left icon"></i><span q-text="title"></span></a>
+            <p class="search-time">
+              <i class="icon-calendar icon"></i>
+              <span q-text="date|dateformat"></span>
+            </p>
+            <p class="search-tag">
+              <i class="icon-price-tags icon"></i>
+              <span q-repeat="tags" q-on="click:choseTag(e, name)" q-text="name|tagformat"></span>
+            </p>
+          </li>
+        </ul>
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-friends" q-show="friends">
+  		
+        <ul class="search-ul">
+          
+            <li class="search-li">
+              <a href="http://github.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>github</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://jianshu.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>简书</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://stackoverflow.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>stackoverflow</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://segmentfault.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>segmentfault</a>
+            </li>
+          
+        </ul>
+  		
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-me" q-show="aboutme">
+  	  	
+  	  		<div class="aboutme-wrap" id="js-aboutme">&lt;span style = &quot;color:rgba(254, 65, 65, 0);&quot;&gt; 隐约雷鸣 阴霾天空&lt;br/&gt;但盼风雨来 能留你在此.&lt;/span&gt;</div>
+  	  	
+    	</section>
+    
+  </div>
+  
+</div>
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+  </div>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+</body>
+</html>

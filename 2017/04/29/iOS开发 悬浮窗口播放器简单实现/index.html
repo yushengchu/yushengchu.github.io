@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <link rel="dns-prefetch" href="http://yoursite.com">
+  <title>iOS开发 悬浮窗口播放器简单实现 | blog with sandsyu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="场景
+
+公司新项目是一个直播类型的项目,要求实现类似熊猫or斗鱼那种退出直播详情界面衔接一个悬浮(可随意拖动)的播放器继续播放.考虑到无缝衔接的需求和重新加载延迟缓冲的问题,大体定下一个思路是用一个单例对象来实现这个功能,单例对象包含一个播放器对象和一些需要用的参数等.
+
+效果">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS开发 悬浮窗口播放器简单实现">
+<meta property="og:url" content="http://yoursite.com/2017/04/29/iOS开发 悬浮窗口播放器简单实现/index.html">
+<meta property="og:site_name" content="blog with sandsyu">
+<meta property="og:description" content="场景
+
+公司新项目是一个直播类型的项目,要求实现类似熊猫or斗鱼那种退出直播详情界面衔接一个悬浮(可随意拖动)的播放器继续播放.考虑到无缝衔接的需求和重新加载延迟缓冲的问题,大体定下一个思路是用一个单例对象来实现这个功能,单例对象包含一个播放器对象和一些需要用的参数等.
+
+效果">
+<meta property="og:image" content="http://oif61bzoy.bkt.clouddn.com/NEPlayer2.gif">
+<meta property="og:updated_time" content="2017-04-29T09:31:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS开发 悬浮窗口播放器简单实现">
+<meta name="twitter:description" content="场景
+
+公司新项目是一个直播类型的项目,要求实现类似熊猫or斗鱼那种退出直播详情界面衔接一个悬浮(可随意拖动)的播放器继续播放.考虑到无缝衔接的需求和重新加载延迟缓冲的问题,大体定下一个思路是用一个单例对象来实现这个功能,单例对象包含一个播放器对象和一些需要用的参数等.
+
+效果">
+<meta name="twitter:image" content="http://oif61bzoy.bkt.clouddn.com/NEPlayer2.gif">
+  
+    <link rel="alternative" href="/atom.xml" title="blog with sandsyu" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/main.css?v=4.0.0.css">
+  
+
+  
+
+</head>
+
+<body>
+  <div id="container" q-class="show:isCtnShow">
+    <canvas id="anm-canvas" class="anm-canvas"></canvas>
+    <div class="left-col" q-class="show:isShow">
+      <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://oif61bzoy.bkt.clouddn.com/header.png" class="js-avatar">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sandsyu</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">隐约雷鸣 阴霾天空 但盼风雨来 能留你在此.</p>
+		
+
+		<nav class="header-menu">
+			<ul>
+			
+				<li><a href="/">主页</a></li>
+	        
+				<li><a href="/tags/测试/">测试</a></li>
+	        
+				<li><a href="/tags/APP/">移动</a></li>
+	        
+				<li><a href="/tags/服务端/">后端</a></li>
+	        
+			</ul>
+		</nav>
+		<nav class="header-smart-menu">
+	        
+    		
+    			
+    			<a data-idx="0" q-on="click: openSlider(e, 'innerArchive')" href="javascript:void(0)">所有文章</a>
+    			
+    			
+            
+    			
+    			<a data-idx="1" q-on="click: openSlider(e, 'friends')" href="javascript:void(0)">友链</a>
+    			
+    			
+            
+    			
+    			<a data-idx="2" q-on="click: openSlider(e, 'aboutme')" href="javascript:void(0)">关于我</a>
+    			
+    			
+            
+		</nav>
+		<nav class="header-nav">
+			<div class="social">
+				
+					<a class="github" target="_blank" href="https://github.com/yushengchu" title="github"><i class="icon-github"></i></a>
+		        
+					<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
+		        
+					<a class="qq" target="_blank" href="#" title="qq"><i class="icon-qq"></i></a>
+		        
+					<a class="mail" target="_blank" href="mailto:yushengchu@aliyun.com" title="mail"><i class="icon-mail"></i></a>
+		        
+			</div>
+		</nav>
+	</header>		
+</div>
+
+    </div>
+    <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"><i class="icon-sort"></i></div>
+  		<h1 class="header-author js-mobile-header hide">Sandsyu</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://oif61bzoy.bkt.clouddn.com/header.png" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Sandsyu</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">隐约雷鸣 阴霾天空 但盼风雨来 能留你在此.</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/tags/测试/">测试</a></li>
+		        
+					<li><a href="/tags/APP/">移动</a></li>
+		        
+					<li><a href="/tags/服务端/">后端</a></li>
+		        
+		        
+		        	<li><a href="/archives/">所有文章</a></li>
+		        
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/yushengchu" title="github"><i class="icon-github"></i></a>
+			        
+						<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
+			        
+						<a class="qq" target="_blank" href="#" title="qq"><i class="icon-qq"></i></a>
+			        
+						<a class="mail" target="_blank" href="mailto:yushengchu@aliyun.com" title="mail"><i class="icon-mail"></i></a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div id="wrapper" class="body-wrap">
+        <div class="menu-l">
+          <div class="canvas-wrap">
+            <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
+          </div>
+          <div id="js-content" class="content-ll">
+            <article id="post-iOS开发 悬浮窗口播放器简单实现" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      iOS开发 悬浮窗口播放器简单实现
+    </h1>
+  
+
+        <a href="/2017/04/29/iOS开发 悬浮窗口播放器简单实现/" class="archive-article-date">
+  	<time datetime="2017-04-29T09:26:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-29</time>
+</a>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>场景</p>
+</blockquote>
+<p>公司新项目是一个直播类型的项目,要求实现类似熊猫or斗鱼那种退出直播详情界面衔接一个悬浮(可随意拖动)的播放器继续播放.<br>考虑到无缝衔接的需求和重新加载延迟缓冲的问题,大体定下一个思路是用一个单例对象来实现这个功能,单例对象包含一个播放器对象和一些需要用的参数等.</p>
+<blockquote>
+<p>效果</p>
+</blockquote>
+<p><img src="http://oif61bzoy.bkt.clouddn.com/NEPlayer2.gif" alt="-w415"><br><a id="more"></a></p>
+<blockquote>
+<p>实现</p>
+</blockquote>
+<p>播放器使用了网易直播提供的NELivePlayer,集成该播放器可以参考网易官网的集成文档:<a href="http://vcloud.163.com/docs/live/player.html" target="_blank" rel="external">http://vcloud.163.com/docs/live/player.html</a> 播放器底层使用的是bilibili开源的ijkplaer</p>
+<p><strong>注:只能真机调试,模拟器播放器会创建失败.</strong></p>
+<pre><code>流程:
+    1.创建PlayerShowView对象传入直播url
+    2.PlayerShowView内部获取PlayObj单利对象,传入直播url,获得播放器视图,添加到自身
+    3.PlayObj获取到直播url,判断是否已经有创建的播放器对象 || 是否是正在播放的直播等做不同操作
+    4.退出播放详情页-调用delloc时发送一个通知,在根视图控制器接受消息创建悬浮播放器
+</code></pre><p>PlayObj.h</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#import <span class="meta-string">&lt;Foundation/Foundation.h&gt;</span></span></div><div class="line"><span class="meta">#import <span class="meta-string">&lt;NELivePlayer/NELivePlayer.h&gt;</span></span></div><div class="line"><span class="meta">#import <span class="meta-string">&lt;NELivePlayer/NELivePlayerController.h&gt;</span></span></div><div class="line"><span class="meta">#import <span class="meta-string">"Masonry.h"</span></span></div><div class="line"><span class="meta">#import <span class="meta-string">&lt;YYKit.h&gt;</span></span></div><div class="line"><span class="meta">#import <span class="meta-string">"UIDevice+XJDevice.h"</span></span></div><div class="line"><span class="meta">#import <span class="meta-string">"MLRefreshView.h"</span></span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@protocol</span> <span class="title">PlayObjDelegate</span> &lt;<span class="title">NSObject</span>&gt;</span></div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)PlayObjFull;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)PlayObjclose;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)PlayObjRestConnect;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)PlayObjBack;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">PlayObj</span> : <span class="title">NSObject</span></span></div><div class="line"></div><div class="line"><span class="comment">/** </span></div><div class="line"> 直播播放器 </div><div class="line"> */</div><div class="line"><span class="keyword">@property</span>(<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) <span class="keyword">id</span>&lt;NELivePlayer&gt; liveplayer;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> 播放url</div><div class="line"> */</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>) <span class="built_in">NSString</span>* liveUrl;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> 是否悬浮窗口播放</div><div class="line"> */</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) <span class="built_in">BOOL</span> isSuspend;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> 是否全屏</div><div class="line"> */</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) <span class="built_in">BOOL</span> isFull;</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">weak</span>) <span class="keyword">id</span>&lt;PlayObjDelegate&gt;delagete;</div><div class="line"></div><div class="line">+ (PlayObj*)getInstance;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)shutDown;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<p>PlayObj.m</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div><div class="line">231</div><div class="line">232</div><div class="line">233</div><div class="line">234</div><div class="line">235</div><div class="line">236</div><div class="line">237</div><div class="line">238</div><div class="line">239</div><div class="line">240</div><div class="line">241</div><div class="line">242</div><div class="line">243</div><div class="line">244</div><div class="line">245</div><div class="line">246</div><div class="line">247</div><div class="line">248</div><div class="line">249</div><div class="line">250</div><div class="line">251</div><div class="line">252</div><div class="line">253</div><div class="line">254</div><div class="line">255</div><div class="line">256</div><div class="line">257</div><div class="line">258</div><div class="line">259</div><div class="line">260</div><div class="line">261</div><div class="line">262</div><div class="line">263</div><div class="line">264</div><div class="line">265</div><div class="line">266</div><div class="line">267</div><div class="line">268</div><div class="line">269</div><div class="line">270</div><div class="line">271</div><div class="line">272</div><div class="line">273</div><div class="line">274</div><div class="line">275</div><div class="line">276</div><div class="line">277</div><div class="line">278</div><div class="line">279</div><div class="line">280</div><div class="line">281</div><div class="line">282</div><div class="line">283</div><div class="line">284</div><div class="line">285</div><div class="line">286</div><div class="line">287</div><div class="line">288</div><div class="line">289</div><div class="line">290</div><div class="line">291</div><div class="line">292</div><div class="line">293</div><div class="line">294</div><div class="line">295</div><div class="line">296</div><div class="line">297</div><div class="line">298</div><div class="line">299</div><div class="line">300</div><div class="line">301</div><div class="line">302</div><div class="line">303</div><div class="line">304</div><div class="line">305</div><div class="line">306</div><div class="line">307</div><div class="line">308</div><div class="line">309</div><div class="line">310</div><div class="line">311</div><div class="line">312</div><div class="line">313</div><div class="line">314</div><div class="line">315</div><div class="line">316</div><div class="line">317</div><div class="line">318</div><div class="line">319</div><div class="line">320</div><div class="line">321</div><div class="line">322</div><div class="line">323</div><div class="line">324</div><div class="line">325</div><div class="line">326</div><div class="line">327</div><div class="line">328</div><div class="line">329</div><div class="line">330</div><div class="line">331</div><div class="line">332</div><div class="line">333</div><div class="line">334</div><div class="line">335</div><div class="line">336</div><div class="line">337</div><div class="line">338</div><div class="line">339</div><div class="line">340</div><div class="line">341</div><div class="line">342</div><div class="line">343</div><div class="line">344</div><div class="line">345</div><div class="line">346</div><div class="line">347</div><div class="line">348</div><div class="line">349</div><div class="line">350</div><div class="line">351</div><div class="line">352</div><div class="line">353</div><div class="line">354</div><div class="line">355</div><div class="line">356</div><div class="line">357</div><div class="line">358</div><div class="line">359</div><div class="line">360</div><div class="line">361</div><div class="line">362</div><div class="line">363</div><div class="line">364</div><div class="line">365</div><div class="line">366</div><div class="line">367</div><div class="line">368</div><div class="line">369</div><div class="line">370</div><div class="line">371</div><div class="line">372</div><div class="line">373</div><div class="line">374</div><div class="line">375</div><div class="line">376</div><div class="line">377</div><div class="line">378</div><div class="line">379</div><div class="line">380</div><div class="line">381</div><div class="line">382</div><div class="line">383</div><div class="line">384</div><div class="line">385</div><div class="line">386</div><div class="line">387</div><div class="line">388</div><div class="line">389</div><div class="line">390</div><div class="line">391</div><div class="line">392</div><div class="line">393</div><div class="line">394</div><div class="line">395</div><div class="line">396</div><div class="line">397</div><div class="line">398</div><div class="line">399</div><div class="line">400</div><div class="line">401</div><div class="line">402</div><div class="line">403</div><div class="line">404</div><div class="line">405</div><div class="line">406</div><div class="line">407</div><div class="line">408</div><div class="line">409</div><div class="line">410</div><div class="line">411</div><div class="line">412</div><div class="line">413</div><div class="line">414</div><div class="line">415</div><div class="line">416</div><div class="line">417</div><div class="line">418</div><div class="line">419</div><div class="line">420</div><div class="line">421</div><div class="line">422</div><div class="line">423</div><div class="line">424</div><div class="line">425</div><div class="line">426</div><div class="line">427</div><div class="line">428</div><div class="line">429</div><div class="line">430</div><div class="line">431</div><div class="line">432</div><div class="line">433</div><div class="line">434</div><div class="line">435</div><div class="line">436</div><div class="line">437</div><div class="line">438</div><div class="line">439</div><div class="line">440</div><div class="line">441</div><div class="line">442</div><div class="line">443</div><div class="line">444</div><div class="line">445</div><div class="line">446</div><div class="line">447</div><div class="line">448</div><div class="line">449</div><div class="line">450</div><div class="line">451</div><div class="line">452</div><div class="line">453</div><div class="line">454</div><div class="line">455</div><div class="line">456</div><div class="line">457</div><div class="line">458</div><div class="line">459</div><div class="line">460</div><div class="line">461</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//</span></div><div class="line"><span class="comment">//  PlayObj.m</span></div><div class="line"><span class="comment">//  ijkplayerDemo</span></div><div class="line"><span class="comment">//</span></div><div class="line"><span class="comment">//  Created by sands on 2017/3/5.</span></div><div class="line"><span class="comment">//  Copyright © 2017年 wanglei. All rights reserved.</span></div><div class="line"><span class="comment">//</span></div><div class="line"></div><div class="line"><span class="meta">#import <span class="meta-string">"PlayObj.h"</span></span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">PlayObj</span>()</span></div><div class="line"></div><div class="line"><span class="comment">/** </span></div><div class="line"> 返回按钮</div><div class="line"> */</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">weak</span>) <span class="built_in">UIButton</span> *backButton;</div><div class="line"></div><div class="line"><span class="comment">/** </span></div><div class="line"> 屏幕切换按钮</div><div class="line"> */</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">weak</span>) <span class="built_in">UIButton</span> *orientationButton;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> 关闭按钮</div><div class="line"> */</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">weak</span>) <span class="built_in">UIButton</span> *closeButton;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> loadingView</div><div class="line"> */</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">weak</span>) MLRefreshView *indicator;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> 加载提示</div><div class="line"> */</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">weak</span>) <span class="built_in">UILabel</span>* lodingTextLabel;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> 加载失败提示视图</div><div class="line"> */</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">weak</span>) <span class="built_in">UIView</span>* faildView;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> 定时器-判断加载超时</div><div class="line"> */</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">weak</span>) <span class="built_in">NSTimer</span>* inOutTimer;</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) <span class="built_in">NSInteger</span> inOutNumber;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="keyword">static</span> PlayObj *playObj = <span class="literal">nil</span>;</div><div class="line"><span class="meta">#define MAX_LODING_TIME 30 //最大加载时间 超过这个时间显示连接失败提示</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">PlayObj</span></span></div><div class="line"></div><div class="line">+ (PlayObj*)getInstance&#123;</div><div class="line">    <span class="keyword">static</span> <span class="built_in">dispatch_once_t</span> onceToken;</div><div class="line">    <span class="built_in">dispatch_once</span>(&amp;onceToken, ^&#123;</div><div class="line">        playObj = [[PlayObj alloc]init];</div><div class="line">    &#125;);</div><div class="line">    <span class="keyword">return</span> playObj;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">instancetype</span>)init</div><div class="line">&#123;</div><div class="line">    <span class="keyword">self</span> = [<span class="keyword">super</span> init];</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">self</span>) &#123;</div><div class="line">        <span class="keyword">self</span>.inOutTimer = <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="meta">#pragma mark =================defaultUI==================</span></div><div class="line">- (<span class="keyword">void</span>)defaultWithPlaye&#123;</div><div class="line">    </div><div class="line">    <span class="keyword">self</span>.liveplayer = [[NELivePlayerController alloc]</div><div class="line">                       initWithContentURL:[<span class="built_in">NSURL</span> URLWithString:<span class="keyword">self</span>.liveUrl]];</div><div class="line">    </div><div class="line">    <span class="keyword">if</span> (<span class="keyword">self</span>.liveplayer == <span class="literal">nil</span>) &#123;</div><div class="line">        <span class="built_in">NSLog</span>(<span class="string">@"failed to initialize!"</span>);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">self</span>.liveplayer.view.frame = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">64</span>, <span class="built_in">CGRectGetWidth</span>([<span class="built_in">UIScreen</span> mainScreen].bounds), <span class="number">210</span>);</div><div class="line">    </div><div class="line">    <span class="keyword">self</span>.liveplayer.view.backgroundColor = [<span class="built_in">UIColor</span> blackColor];</div><div class="line">    </div><div class="line">    <span class="comment">//设置播放缓冲策略，直播采用低延时模式或流畅模式，点播采用抗抖动模式，具体可参见API文档</span></div><div class="line">    [<span class="keyword">self</span>.liveplayer setBufferStrategy:NELPLowDelay];</div><div class="line">    <span class="comment">//设置画面显示模式，默认按原始大小进行播放，具体可参见API文档</span></div><div class="line">    [<span class="keyword">self</span>.liveplayer setScalingMode:NELPMovieScalingModeNone];</div><div class="line">    <span class="comment">//设置视频文件初始化完成后是否自动播放，默认自动播放</span></div><div class="line">    [<span class="keyword">self</span>.liveplayer setShouldAutoplay:<span class="literal">YES</span>];</div><div class="line">    <span class="comment">//设置是否开启硬件解码，IOS 8.0以上支持硬件解码，默认为软件解码</span></div><div class="line">    [<span class="keyword">self</span>.liveplayer setHardwareDecoder:<span class="literal">YES</span>];</div><div class="line">    <span class="comment">//设置播放器切入后台后时暂停还是继续播放，默认暂停</span></div><div class="line">    [<span class="keyword">self</span>.liveplayer setPauseInBackground:<span class="literal">NO</span>];</div><div class="line">    </div><div class="line">    [<span class="keyword">self</span>.liveplayer prepareToPlay];</div><div class="line">    </div><div class="line">    [<span class="keyword">self</span> defaultOtherUI];</div><div class="line">    </div><div class="line">    [<span class="keyword">self</span> initNotification];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)defaultOtherUI&#123;</div><div class="line">    <span class="keyword">if</span> (_backButton != <span class="literal">nil</span>) &#123;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line">    @weakify(<span class="keyword">self</span>);</div><div class="line">    [<span class="keyword">self</span>.backButton mas_remakeConstraints:^(MASConstraintMaker *make) &#123;</div><div class="line">        make.left.top.mas_equalTo(@<span class="number">16</span>);</div><div class="line">        make.size.mas_equalTo(<span class="built_in">CGSizeMake</span>(<span class="number">30.</span>f,<span class="number">30.</span>f));</div><div class="line">    &#125;];</div><div class="line">    </div><div class="line">    [<span class="keyword">self</span>.orientationButton mas_remakeConstraints:^(MASConstraintMaker *make) &#123;</div><div class="line">        make.right.bottom.mas_equalTo(@(<span class="number">-16</span>));</div><div class="line">        make.size.mas_equalTo(<span class="built_in">CGSizeMake</span>(<span class="number">30.</span>f, <span class="number">30.</span>f));</div><div class="line">    &#125;];</div><div class="line"> </div><div class="line">    [<span class="keyword">self</span>.indicator mas_makeConstraints:^(MASConstraintMaker *make) &#123;</div><div class="line">        make.centerY.mas_equalTo(weak_self.liveplayer.view.mas_centerY);</div><div class="line">        make.centerX.mas_equalTo(weak_self.liveplayer.view.mas_centerX);</div><div class="line">        make.size.mas_equalTo(<span class="built_in">CGSizeMake</span>(<span class="number">20.</span>f,<span class="number">20.</span>f));</div><div class="line">    &#125;];</div><div class="line">    </div><div class="line">    [<span class="keyword">self</span>.lodingTextLabel mas_makeConstraints:^(MASConstraintMaker *make) &#123;</div><div class="line">        make.centerX.mas_equalTo(weak_self.liveplayer.view.mas_centerX);</div><div class="line">        make.top.equalTo(weak_self.indicator.mas_bottom).with.offset(<span class="number">5</span>);</div><div class="line">    &#125;];</div><div class="line">    </div><div class="line">    [<span class="keyword">self</span>.closeButton mas_makeConstraints:^(MASConstraintMaker *make) &#123;</div><div class="line">        make.top.mas_equalTo(@<span class="number">10</span>);</div><div class="line">        make.right.mas_equalTo(@<span class="number">-10</span>);</div><div class="line">        make.size.mas_equalTo(<span class="built_in">CGSizeMake</span>(<span class="number">15.</span>f, <span class="number">15.</span>f));</div><div class="line">    &#125;];</div><div class="line">    </div><div class="line">    [<span class="keyword">self</span>.faildView mas_makeConstraints:^(MASConstraintMaker *make) &#123;</div><div class="line">        make.size.mas_equalTo(weak_self.liveplayer.view);</div><div class="line">        make.center.mas_equalTo(weak_self.liveplayer.view);</div><div class="line">    &#125;];</div><div class="line">    </div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="meta">#pragma mark sett</span></div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> 传入url初始化播发器</div><div class="line"></div><div class="line"> @param liveUrl 直播地址</div><div class="line"> */</div><div class="line">- (<span class="keyword">void</span>)setLiveUrl:(<span class="built_in">NSString</span> *)liveUrl&#123;</div><div class="line">    _liveUrl = liveUrl;</div><div class="line">    [<span class="keyword">self</span> defaultWithPlaye];</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> 根据isSuspend展示不同的OtherUI</div><div class="line"></div><div class="line"> @param isSuspend 是否悬浮窗口</div><div class="line"> */</div><div class="line">- (<span class="keyword">void</span>)setIsSuspend:(<span class="built_in">BOOL</span>)isSuspend&#123;</div><div class="line">    _isSuspend = isSuspend;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (isSuspend) &#123;</div><div class="line">        <span class="keyword">self</span>.backButton.hidden = <span class="literal">true</span>;</div><div class="line">        <span class="keyword">self</span>.orientationButton.hidden = <span class="literal">true</span>;</div><div class="line">        <span class="keyword">self</span>.closeButton.hidden = <span class="literal">false</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> 详情页内非全屏不显示返回按钮</div><div class="line"></div><div class="line"> @param isFull 是否全屏</div><div class="line"> */</div><div class="line">- (<span class="keyword">void</span>)setIsFull:(<span class="built_in">BOOL</span>)isFull&#123;</div><div class="line">    _isFull = isFull;</div><div class="line">    <span class="keyword">self</span>.backButton.hidden = !_isFull;</div><div class="line">    <span class="keyword">self</span>.orientationButton.hidden = <span class="literal">false</span>;</div><div class="line">    <span class="keyword">self</span>.closeButton.hidden = <span class="literal">true</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="meta">#pragma mark OtherUI (返回 放大 loding 关闭 加载失败)</span></div><div class="line">- (<span class="built_in">UIButton</span>*)backButton</div><div class="line">&#123;</div><div class="line">    @weakify(<span class="keyword">self</span>);</div><div class="line">    <span class="keyword">if</span> (!_backButton) &#123;</div><div class="line">        <span class="built_in">UIButton</span> *button = [<span class="built_in">UIButton</span> buttonWithType:<span class="built_in">UIButtonTypeCustom</span>];</div><div class="line">        [button setImage:[<span class="built_in">UIImage</span> imageNamed:<span class="string">@"player_backButton_icon_30x30_"</span>] forState:<span class="built_in">UIControlStateNormal</span>];</div><div class="line">        [button setImage:[<span class="built_in">UIImage</span> imageNamed:<span class="string">@"player_backButton_pressIcon_30x30_"</span>] forState:<span class="built_in">UIControlStateHighlighted</span>];</div><div class="line">        [button addBlockForControlEvents:<span class="built_in">UIControlEventTouchUpInside</span> block:^(<span class="keyword">id</span>  _Nonnull sender) &#123;</div><div class="line">            [weak_self.delagete PlayObjBack];</div><div class="line">        &#125;];</div><div class="line">        [<span class="keyword">self</span>.liveplayer.view addSubview:button];</div><div class="line">        _backButton = button;</div><div class="line">        _backButton.hidden = !_isFull;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> _backButton;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="built_in">UIButton</span>*)orientationButton</div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> (!_orientationButton) &#123;</div><div class="line">        <span class="built_in">UIButton</span> *button = [<span class="built_in">UIButton</span> buttonWithType:<span class="built_in">UIButtonTypeCustom</span>];</div><div class="line">        [button setImage:[<span class="built_in">UIImage</span> imageNamed:<span class="string">@"player_fullScreen_icon_30x30_"</span>] forState:<span class="built_in">UIControlStateNormal</span>];</div><div class="line">        [button setImage:[<span class="built_in">UIImage</span> imageNamed:<span class="string">@"player_fullScreen_pressIcon_30x30_"</span>] forState:<span class="built_in">UIControlStateHighlighted</span>];</div><div class="line">        [button addTarget:<span class="keyword">self</span> action:<span class="keyword">@selector</span>(scaleFull) forControlEvents:<span class="built_in">UIControlEventTouchUpInside</span>];</div><div class="line">        [<span class="keyword">self</span>.liveplayer.view addSubview:button];</div><div class="line">        _orientationButton = button;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> _orientationButton;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (MLRefreshView*)indicator&#123;</div><div class="line">    <span class="keyword">if</span> (!_indicator) &#123;</div><div class="line">        MLRefreshView* indicator = [MLRefreshView refreshViewWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">20</span>, <span class="number">20</span>) logoStyle:RefreshLogoNone];</div><div class="line">        [<span class="keyword">self</span>.liveplayer.view addSubview:indicator];</div><div class="line">        _indicator = indicator;</div><div class="line">        [<span class="keyword">self</span> loadingStatus:<span class="literal">YES</span>];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> _indicator;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="built_in">UILabel</span>*)lodingTextLabel&#123;</div><div class="line">    <span class="keyword">if</span> (!_lodingTextLabel) &#123;</div><div class="line">        <span class="built_in">UILabel</span>* label = [[<span class="built_in">UILabel</span> alloc]initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">100</span>, <span class="number">20</span>)];</div><div class="line">        label.text  = <span class="string">@"走心加载中"</span>;</div><div class="line">        label.backgroundColor = [<span class="built_in">UIColor</span> clearColor];</div><div class="line">        label.textColor = [<span class="built_in">UIColor</span> whiteColor];</div><div class="line">        label.textAlignment = <span class="built_in">NSTextAlignmentCenter</span>;</div><div class="line">        label.font = [<span class="built_in">UIFont</span> systemFontOfSize:<span class="number">11</span>];</div><div class="line">        _lodingTextLabel = label;</div><div class="line">        [<span class="keyword">self</span>.liveplayer.view addSubview:label];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> _lodingTextLabel;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="built_in">UIButton</span>*)closeButton&#123;</div><div class="line">    @weakify(<span class="keyword">self</span>);</div><div class="line">    <span class="keyword">if</span> (!_closeButton) &#123;</div><div class="line">        <span class="built_in">UIButton</span> *button = [<span class="built_in">UIButton</span> buttonWithType:<span class="built_in">UIButtonTypeCustom</span>];</div><div class="line">        [button setTitle:<span class="string">@"X"</span> forState:<span class="built_in">UIControlStateNormal</span>];</div><div class="line">        [button setBackgroundColor:[<span class="built_in">UIColor</span> redColor]];</div><div class="line">        [button addBlockForControlEvents:<span class="built_in">UIControlEventTouchUpInside</span> block:^(<span class="keyword">id</span>  _Nonnull sender) &#123;</div><div class="line">            [weak_self.delagete PlayObjclose];</div><div class="line">        &#125;];</div><div class="line">        [<span class="keyword">self</span>.liveplayer.view addSubview:button];</div><div class="line">        _closeButton = button;</div><div class="line">        _closeButton.hidden = !_isSuspend;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> _closeButton;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="built_in">UIView</span>*)faildView&#123;</div><div class="line">    @weakify(<span class="keyword">self</span>);</div><div class="line">    <span class="keyword">if</span> (!_faildView) &#123;</div><div class="line">        <span class="built_in">UIView</span>* view = [[<span class="built_in">UIView</span> alloc]initWithFrame:<span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">100</span>, <span class="number">100</span>)];</div><div class="line">        <span class="built_in">UIImageView</span>* image = [[<span class="built_in">UIImageView</span> alloc]initWithImage:[<span class="built_in">UIImage</span> imageNamed:<span class="string">@"failure"</span>]];</div><div class="line">        image.tag = <span class="number">101</span>;</div><div class="line">        image.frame = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">100</span>, <span class="number">75</span>);</div><div class="line">        [view addSubview:image];</div><div class="line">        [image mas_makeConstraints:^(MASConstraintMaker *make) &#123;</div><div class="line">            make.center.mas_equalTo(view);</div><div class="line">        &#125;];</div><div class="line">        <span class="built_in">UITapGestureRecognizer</span>* tap = [[<span class="built_in">UITapGestureRecognizer</span> alloc]initWithActionBlock:^(<span class="keyword">id</span>  _Nonnull sender) &#123;</div><div class="line">            <span class="built_in">NSLog</span>(<span class="string">@"faild View tap"</span>);</div><div class="line">            [weak_self.delagete PlayObjRestConnect];</div><div class="line">            _faildView.hidden = <span class="literal">true</span>;</div><div class="line">        &#125;];</div><div class="line">        [view addGestureRecognizer:tap];</div><div class="line">        [<span class="keyword">self</span>.liveplayer.view addSubview:view];</div><div class="line">        _faildView = view;</div><div class="line">        _faildView.hidden = <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> _faildView;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">#pragma mark notify method</span></div><div class="line">- (<span class="keyword">void</span>)initNotification&#123;</div><div class="line">    <span class="comment">// 播放器媒体流初始化完成后触发，收到该通知表示可以开始播放</span></div><div class="line">    [[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserver:<span class="keyword">self</span></div><div class="line">                                             selector:<span class="keyword">@selector</span>(NELivePlayerDidPreparedToPlay:)</div><div class="line">                                                 name:NELivePlayerDidPreparedToPlayNotification</div><div class="line">                                               object:_liveplayer];</div><div class="line">    </div><div class="line">    <span class="comment">// 播放器加载状态发生变化时触发，如开始缓冲，缓冲结束</span></div><div class="line">    [[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserver:<span class="keyword">self</span></div><div class="line">                                             selector:<span class="keyword">@selector</span>(NeLivePlayerloadStateChanged:)</div><div class="line">                                                 name:NELivePlayerLoadStateChangedNotification</div><div class="line">                                               object:_liveplayer];</div><div class="line">    </div><div class="line">    <span class="comment">// 正常播放结束或播放过程中发生错误导致播放结束时触发的通知</span></div><div class="line">    [[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserver:<span class="keyword">self</span></div><div class="line">                                             selector:<span class="keyword">@selector</span>(NELivePlayerPlayBackFinished:)</div><div class="line">                                                 name:NELivePlayerPlaybackFinishedNotification</div><div class="line">                                               object:_liveplayer];</div><div class="line">    </div><div class="line">    <span class="comment">// 第一帧视频图像显示时触发的通知</span></div><div class="line">    [[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserver:<span class="keyword">self</span></div><div class="line">                                             selector:<span class="keyword">@selector</span>(NELivePlayerFirstVideoDisplayed:)</div><div class="line">                                                 name:NELivePlayerFirstVideoDisplayedNotification</div><div class="line">                                               object:_liveplayer];</div><div class="line">    </div><div class="line">    <span class="comment">// 第一帧音频播放时触发的通知</span></div><div class="line">    [[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserver:<span class="keyword">self</span></div><div class="line">                                             selector:<span class="keyword">@selector</span>(NELivePlayerFirstAudioDisplayed:)</div><div class="line">                                                 name:NELivePlayerFirstAudioDisplayedNotification</div><div class="line">                                               object:_liveplayer];</div><div class="line">    </div><div class="line">    </div><div class="line">    <span class="comment">// 资源释放成功后触发的通知</span></div><div class="line">    [[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserver:<span class="keyword">self</span></div><div class="line">                                             selector:<span class="keyword">@selector</span>(NELivePlayerReleaseSuccess:)</div><div class="line">                                                 name:NELivePlayerReleaseSueecssNotification</div><div class="line">                                               object:_liveplayer];</div><div class="line">    </div><div class="line">    <span class="comment">// 视频码流解析失败时触发的通知</span></div><div class="line">    [[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserver:<span class="keyword">self</span></div><div class="line">                                             selector:<span class="keyword">@selector</span>(NELivePlayerVideoParseError:)</div><div class="line">                                                 name:NELivePlayerVideoParseErrorNotification</div><div class="line">                                               object:_liveplayer];</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">#pragma 通知</span></div><div class="line">- (<span class="keyword">void</span>)NELivePlayerDidPreparedToPlay:(<span class="built_in">NSNotificationCenter</span>*)not&#123;</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"// 播放器媒体流初始化完成后触发，收到该通知表示可以开始播放"</span>);</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"_liveplayer = %@"</span>,_liveplayer);</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)NeLivePlayerloadStateChanged:(<span class="built_in">NSNotification</span>*)not&#123;</div><div class="line">    <span class="keyword">switch</span> (<span class="keyword">self</span>.liveplayer.loadState) &#123;</div><div class="line">        <span class="keyword">case</span> NELPMovieLoadStatePlayable:</div><div class="line">            <span class="built_in">NSLog</span>(<span class="string">@"NELPMovieLoadStatePlayable 播放器初始化完成，可以播放"</span>);</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        <span class="keyword">case</span> NELPMovieLoadStatePlaythroughOK:&#123;</div><div class="line">            <span class="built_in">NSLog</span>(<span class="string">@"NELPMovieLoadStatePlaythroughOK 缓冲完成"</span>);</div><div class="line">            [<span class="keyword">self</span> loadingStatus:<span class="literal">NO</span>];</div><div class="line">            [<span class="keyword">self</span>.inOutTimer invalidate];</div><div class="line">            _inOutNumber = <span class="number">0</span>;</div><div class="line">        &#125;</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        <span class="keyword">case</span> NELPMovieLoadStateStalled:</div><div class="line">            <span class="built_in">NSLog</span>(<span class="string">@"NELPMovieLoadStateStalled 缓冲 展示loding.."</span>);</div><div class="line">            [<span class="keyword">self</span> loadingStatus:<span class="literal">YES</span>];</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        <span class="keyword">default</span>:</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)NELivePlayerPlayBackFinished:(<span class="built_in">NSNotification</span>*)not&#123;</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"// 正常播放结束或播放过程中发生错误导致播放结束时触发的通知"</span>);</div><div class="line">    [<span class="keyword">self</span> showFaildViewWithType:<span class="number">2</span>];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)NELivePlayerFirstVideoDisplayed:(<span class="built_in">NSNotificationCenter</span>*)not&#123;</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"// 第一帧视频图像显示时触发的通知"</span>);</div><div class="line">    [<span class="keyword">self</span> loadingStatus:<span class="literal">NO</span>];</div><div class="line">    [<span class="keyword">self</span> timeEnd];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)NELivePlayerFirstAudioDisplayed:(<span class="built_in">NSNotificationCenter</span>*)not&#123;</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"// 第一帧音频播放时触发的通知"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)NELivePlayerReleaseSuccess:(<span class="built_in">NSNotificationCenter</span>*)not&#123;</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"// 资源释放成功后触发的通知"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)NELivePlayerVideoParseError:(<span class="built_in">NSNotificationCenter</span>*)not&#123;</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"// 视频码流解析失败时触发的通知"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="meta">#pragma mark Other Method</span></div><div class="line">- (<span class="keyword">void</span>)shutDown&#123;</div><div class="line">    [<span class="keyword">self</span>.liveplayer shutdown];</div><div class="line">    [<span class="keyword">self</span>.liveplayer.view removeFromSuperview];</div><div class="line">    <span class="keyword">self</span>.liveplayer = <span class="literal">nil</span>;</div><div class="line">    _liveUrl = <span class="string">@""</span>;</div><div class="line">    [<span class="keyword">self</span> removePlaySub];</div><div class="line">    [<span class="keyword">self</span> timeEnd];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)removePlaySub&#123;</div><div class="line">    _faildView = <span class="literal">nil</span>;</div><div class="line">    _orientationButton = <span class="literal">nil</span>;</div><div class="line">    _closeButton = <span class="literal">nil</span>;</div><div class="line">    _indicator = <span class="literal">nil</span>;</div><div class="line">    _lodingTextLabel = <span class="literal">nil</span>;</div><div class="line">    _backButton = <span class="literal">nil</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> 全屏</div><div class="line"> */</div><div class="line">- (<span class="keyword">void</span>)scaleFull&#123;</div><div class="line">    [<span class="keyword">self</span>.delagete PlayObjFull];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)loadingStatus:(<span class="built_in">BOOL</span>)status&#123;</div><div class="line">    _indicator.hidden = !status;</div><div class="line">    _lodingTextLabel.hidden = _indicator.hidden;</div><div class="line">    </div><div class="line">    <span class="keyword">if</span> (status) &#123;</div><div class="line">        [_indicator startAnimation];</div><div class="line">        _inOutTimer = <span class="number">0</span>;</div><div class="line">        <span class="keyword">self</span>.inOutTimer = [<span class="built_in">NSTimer</span> scheduledTimerWithTimeInterval:<span class="number">1.0</span>f target:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(checkLiveTimerOut:) userInfo:<span class="literal">nil</span> repeats:<span class="literal">YES</span>];</div><div class="line">    &#125;<span class="keyword">else</span>&#123;</div><div class="line">        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(<span class="number">1</span> * <span class="built_in">NSEC_PER_SEC</span>)), dispatch_get_main_queue(), ^&#123;</div><div class="line">            [_indicator stopAnimation];</div><div class="line">        &#125;);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)checkLiveTimerOut:(<span class="built_in">NSTimer</span>*)timer&#123;</div><div class="line">    _inOutNumber++;</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"checkLiveTimerOut %ld"</span>,(<span class="keyword">long</span>)_inOutNumber);</div><div class="line">    <span class="keyword">if</span> (_inOutNumber&gt;=<span class="number">20</span>) &#123;</div><div class="line">        _indicator.hidden = <span class="literal">true</span>;</div><div class="line">        _lodingTextLabel.hidden = <span class="literal">true</span>;</div><div class="line">        [<span class="keyword">self</span>.liveplayer stop];</div><div class="line">        [<span class="keyword">self</span> showFaildViewWithType:<span class="number">1</span>];</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)timeEnd&#123;</div><div class="line">    [_inOutTimer invalidate];</div><div class="line">    _inOutNumber = <span class="number">0</span>;</div><div class="line">    _inOutTimer = <span class="literal">nil</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> 展示错误提示View</div><div class="line"></div><div class="line"> @param type 1:点击重连 2:主播下播</div><div class="line"> */</div><div class="line">- (<span class="keyword">void</span>)showFaildViewWithType:(<span class="built_in">NSInteger</span>)type&#123;</div><div class="line">    <span class="keyword">if</span> (type == <span class="number">1</span>) &#123;</div><div class="line">        _faildView.hidden = <span class="literal">false</span>;</div><div class="line">        _faildView.userInteractionEnabled = <span class="literal">true</span>;</div><div class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span>(type == <span class="number">2</span>)&#123;</div><div class="line">        <span class="built_in">UIImageView</span>* imageView = [_faildView viewWithTag:<span class="number">101</span>];</div><div class="line">        <span class="keyword">if</span> (imageView) &#123;</div><div class="line">            imageView.image = [<span class="built_in">UIImage</span> imageNamed:<span class="string">@"live_icon_absent"</span>];</div><div class="line">        &#125;</div><div class="line">        _faildView.hidden = <span class="literal">false</span>;</div><div class="line">        _faildView.userInteractionEnabled = <span class="literal">false</span>;</div><div class="line">        [<span class="keyword">self</span> loadingStatus:<span class="literal">false</span>];</div><div class="line">    &#125;</div><div class="line">    [<span class="keyword">self</span> timeEnd];</div><div class="line">&#125;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<p>PlayerShowView.h</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//</span></div><div class="line"><span class="comment">//  PlayerShowView.h</span></div><div class="line"><span class="comment">//  NEPlyaer</span></div><div class="line"><span class="comment">//</span></div><div class="line"><span class="comment">//  Created by fhzx_mac on 2017/3/9.</span></div><div class="line"><span class="comment">//  Copyright © 2017年 sandsyu. All rights reserved.</span></div><div class="line"><span class="comment">//</span></div><div class="line"></div><div class="line"><span class="meta">#import <span class="meta-string">&lt;UIKit/UIKit.h&gt;</span></span></div><div class="line"><span class="meta">#import <span class="meta-string">"Masonry.h"</span></span></div><div class="line"><span class="meta">#import <span class="meta-string">&lt;NELivePlayer/NELivePlayer.h&gt;</span></span></div><div class="line"><span class="meta">#import <span class="meta-string">&lt;NELivePlayer/NELivePlayerController.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">PlayerShowView</span> : <span class="title">UIView</span></span></div><div class="line"></div><div class="line">- (<span class="keyword">instancetype</span>)initWithFrame:(<span class="built_in">CGRect</span>)frame connectWithUrl:(<span class="built_in">NSString</span>*)url;</div><div class="line"></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) <span class="keyword">id</span>&lt;NELivePlayer&gt; liveplayer;</div><div class="line"></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>) <span class="built_in">NSString</span>* url;</div><div class="line"></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) <span class="built_in">BOOL</span> isFull;</div><div class="line"></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) <span class="built_in">BOOL</span> isSuspend;</div><div class="line"></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) <span class="built_in">CGRect</span> oldFrame;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<p>PlayerShowView.m</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//</span></div><div class="line"><span class="comment">//  PlayerShowView.m</span></div><div class="line"><span class="comment">//  NEPlyaer</span></div><div class="line"><span class="comment">//</span></div><div class="line"><span class="comment">//  Created by fhzx_mac on 2017/3/9.</span></div><div class="line"><span class="comment">//  Copyright © 2017年 sandsyu. All rights reserved.</span></div><div class="line"><span class="comment">//</span></div><div class="line"></div><div class="line"><span class="meta">#import <span class="meta-string">"PlayerShowView.h"</span></span></div><div class="line"><span class="meta">#import <span class="meta-string">"PlayObj.h"</span></span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">PlayerShowView</span>()&lt;<span class="title">PlayObjDelegate</span>&gt;</span></div><div class="line"></div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">PlayerShowView</span></span></div><div class="line"></div><div class="line">- (<span class="keyword">instancetype</span>)initWithFrame:(<span class="built_in">CGRect</span>)frame connectWithUrl:(<span class="built_in">NSString</span>*)url</div><div class="line">&#123;</div><div class="line">    <span class="keyword">self</span> = [<span class="keyword">super</span> initWithFrame:frame];</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">self</span>) &#123;</div><div class="line">        <span class="keyword">self</span>.url = url;</div><div class="line">        [<span class="keyword">self</span> defaultUI];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">self</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)defaultUI&#123;</div><div class="line">    </div><div class="line">    @weakify(<span class="keyword">self</span>);</div><div class="line">    <span class="keyword">if</span> ([PlayObj getInstance].liveUrl.length&lt;=<span class="number">0</span>) &#123;</div><div class="line">        [PlayObj getInstance].liveUrl = <span class="keyword">self</span>.url;</div><div class="line">    &#125;<span class="keyword">else</span>&#123;</div><div class="line">        <span class="keyword">self</span>.url = [PlayObj getInstance].liveUrl;</div><div class="line">    &#125;</div><div class="line">    [PlayObj getInstance].delagete = <span class="keyword">self</span>;</div><div class="line">    [<span class="keyword">self</span> addSubview:[PlayObj getInstance].liveplayer.view];</div><div class="line">    </div><div class="line">    [<span class="keyword">self</span> sendSubviewToBack:<span class="keyword">self</span>.liveplayer.view];</div><div class="line">    </div><div class="line">    [[PlayObj getInstance].liveplayer.view mas_makeConstraints:^(MASConstraintMaker *make) &#123;</div><div class="line">        make.size.mas_equalTo(weak_self);</div><div class="line">        make.center.mas_equalTo(weak_self);</div><div class="line">    &#125;];</div><div class="line">    </div><div class="line">    [PlayObj getInstance].isSuspend = <span class="keyword">self</span>.isSuspend;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)setIsSuspend:(<span class="built_in">BOOL</span>)isSuspend&#123;</div><div class="line">    _isSuspend = isSuspend;</div><div class="line">    [PlayObj getInstance].isSuspend = _isSuspend;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)setIsFull:(<span class="built_in">BOOL</span>)isFull&#123;</div><div class="line">    _isFull = isFull;</div><div class="line">    [PlayObj getInstance].isFull = isFull;</div><div class="line">&#125;</div><div class="line"></div><div class="line">-(<span class="keyword">void</span>)PlayObjFull&#123;</div><div class="line">    @weakify(<span class="keyword">self</span>);</div><div class="line">    <span class="keyword">if</span> (!_isFull) &#123;</div><div class="line">        weak_self.oldFrame = weak_self.frame;</div><div class="line">        weak_self.viewController.navigationController.navigationBar.hidden = <span class="literal">true</span>;</div><div class="line">        [<span class="built_in">UIDevice</span> setOrientation:<span class="built_in">UIInterfaceOrientationLandscapeRight</span>];</div><div class="line">        weak_self.frame = weak_self.window.bounds;</div><div class="line">        weak_self.isFull = <span class="literal">true</span>;</div><div class="line">    &#125;<span class="keyword">else</span>&#123;</div><div class="line">        weak_self.viewController.navigationController.navigationBar.hidden = <span class="literal">false</span>;</div><div class="line">        [<span class="built_in">UIDevice</span> setOrientation:<span class="built_in">UIInterfaceOrientationPortrait</span>];</div><div class="line">        weak_self.frame = weak_self.oldFrame;</div><div class="line">        weak_self.isFull = <span class="literal">false</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)PlayObjclose&#123;</div><div class="line">    [[PlayObj getInstance]shutDown];</div><div class="line">    [<span class="keyword">self</span> removeFromSuperview];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)PlayObjRestConnect&#123;</div><div class="line">    [[PlayObj getInstance]shutDown];</div><div class="line">    [<span class="keyword">self</span> defaultUI];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)PlayObjBack&#123;</div><div class="line">    [<span class="keyword">self</span> PlayObjFull];</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<p>使用:</p>
+<figure class="highlight cos"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">PlayerShowView* <span class="keyword">View</span> = [[PlayerShowView alloc]initWithFrame:CGRectMake(<span class="number">0</span>, <span class="number">100</span>, self.<span class="keyword">view</span>.width, self.<span class="keyword">view</span>.width*<span class="number">0.6</span>)</div><div class="line">                                              connectWithUrl:self.liveUrl]<span class="comment">;</span></div><div class="line"><span class="keyword">View</span>.isFull = false<span class="comment">;</span></div><div class="line"><span class="keyword">View</span>.isSuspend = false<span class="comment">;</span></div><div class="line">[self.<span class="keyword">view</span> addSubview:<span class="keyword">View</span>]<span class="comment">;</span></div></pre></td></tr></table></figure>
+<p>具体实现可以参考github上的代码:<br><a href="https://github.com/yushengchu/NEPlyaer" target="_blank" rel="external">https://github.com/yushengchu/NEPlyaer</a></p>
+<p>DEMO使用:<br>播放器静态库文件过大上传到百度云<br><a href="https://pan.baidu.com/s/1i4FDtm1" target="_blank" rel="external">https://pan.baidu.com/s/1i4FDtm1</a><br>下载解压,放入项目根目录(xcodeproj文件所在目录)运行即可</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/APP/">APP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+	</div>
+
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/04/29/iOS开发 悬浮窗口播放器简单实现/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2017/04/29/git使用实录 提交记录包含过大文件问题/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          git使用实录 文件过大无法提交问题解决
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/02/14/使用Jenkins+Git+蒲公英搭建iOS持续集成平台/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">使用Jenkins+Git+蒲公英搭建iOS持续集成平台</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+
+
+
+          </div>
+        </div>
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sandsyu
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+    <p class="copyright">本站总访问量 <span id="busuanzi_value_site_pv"></span> 次, 访客数 <span id="busuanzi_value_site_uv"></span> 人次, 本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次</p>
+  </div>
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</footer>
+    </div>
+    <script>
+	var yiliaConfig = {
+		mathjax: false,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: "/",
+		innerArchive: true
+	}
+</script>
+
+<script src="/./main.js?v=4.0.0.js"></script>
+
+
+    
+<div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
+  <div class="tools-wrap">
+    
+    	<section class="tools-section tools-section-all" q-show="innerArchive">
+        <div class="search-wrap">
+          <input class="search-ipt" q-model="search" type="text" placeholder="find something…">
+          <i class="icon-search icon" q-show="search|isEmptyStr"></i>
+          <i class="icon-close icon" q-show="search|isNotEmptyStr" q-on="click:clearChose(e)"></i>
+        </div>
+        <div class="widget tagcloud search-tag">
+          <p class="search-tag-wording">tag:</p>
+          <label class="search-switch">
+            <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
+          </label>
+          <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">Appium</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">unittest</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">iOS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">服务端</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">APP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">移动开发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">开发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">swift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">移动端</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">app</a>
+              </li>
+            
+            <div class="clearfix"></div>
+          </ul>
+        </div>
+        <ul class="search-ul">
+          <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
+            缺失模块。<br/>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            2、在根目录_config.yml里添加配置：
+<pre style="font-size: 12px;" q-show="jsonFail">
+  jsonContent:
+    meta: false
+    pages: false
+    posts:
+      title: true
+      date: true
+      path: true
+      text: true
+      raw: false
+      content: false
+      slug: false
+      updated: false
+      comments: false
+      link: false
+      permalink: false
+      excerpt: false
+      categories: false
+      tags: true
+</pre>
+          </p>
+          <li class="search-li" q-repeat="items" q-show="isShow">
+            <a q-attr="href:path|urlformat" class="search-title"><i class="icon-quo-left icon"></i><span q-text="title"></span></a>
+            <p class="search-time">
+              <i class="icon-calendar icon"></i>
+              <span q-text="date|dateformat"></span>
+            </p>
+            <p class="search-tag">
+              <i class="icon-price-tags icon"></i>
+              <span q-repeat="tags" q-on="click:choseTag(e, name)" q-text="name|tagformat"></span>
+            </p>
+          </li>
+        </ul>
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-friends" q-show="friends">
+  		
+        <ul class="search-ul">
+          
+            <li class="search-li">
+              <a href="http://github.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>github</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://jianshu.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>简书</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://stackoverflow.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>stackoverflow</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://segmentfault.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>segmentfault</a>
+            </li>
+          
+        </ul>
+  		
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-me" q-show="aboutme">
+  	  	
+  	  		<div class="aboutme-wrap" id="js-aboutme">&lt;span style = &quot;color:rgba(254, 65, 65, 0);&quot;&gt; 隐约雷鸣 阴霾天空&lt;br/&gt;但盼风雨来 能留你在此.&lt;/span&gt;</div>
+  	  	
+    	</section>
+    
+  </div>
+  
+</div>
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+  </div>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+</body>
+</html>

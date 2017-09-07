@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <link rel="dns-prefetch" href="http://yoursite.com">
+  <title>blog with sandsyu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="blog with sandsyu">
+<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:site_name" content="blog with sandsyu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="blog with sandsyu">
+  
+    <link rel="alternative" href="/atom.xml" title="blog with sandsyu" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/main.css?v=4.0.0.css">
+  
+
+  
+
+</head>
+
+<body>
+  <div id="container" q-class="show:isCtnShow">
+    <canvas id="anm-canvas" class="anm-canvas"></canvas>
+    <div class="left-col" q-class="show:isShow">
+      <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://oif61bzoy.bkt.clouddn.com/header.png" class="js-avatar">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sandsyu</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">隐约雷鸣 阴霾天空 但盼风雨来 能留你在此.</p>
+		
+
+		<nav class="header-menu">
+			<ul>
+			
+				<li><a href="/">主页</a></li>
+	        
+				<li><a href="/tags/测试/">测试</a></li>
+	        
+				<li><a href="/tags/APP/">移动</a></li>
+	        
+				<li><a href="/tags/服务端/">后端</a></li>
+	        
+			</ul>
+		</nav>
+		<nav class="header-smart-menu">
+	        
+    		
+    			
+    			<a data-idx="0" q-on="click: openSlider(e, 'innerArchive')" href="javascript:void(0)">所有文章</a>
+    			
+    			
+            
+    			
+    			<a data-idx="1" q-on="click: openSlider(e, 'friends')" href="javascript:void(0)">友链</a>
+    			
+    			
+            
+    			
+    			<a data-idx="2" q-on="click: openSlider(e, 'aboutme')" href="javascript:void(0)">关于我</a>
+    			
+    			
+            
+		</nav>
+		<nav class="header-nav">
+			<div class="social">
+				
+					<a class="github" target="_blank" href="https://github.com/yushengchu" title="github"><i class="icon-github"></i></a>
+		        
+					<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
+		        
+					<a class="qq" target="_blank" href="#" title="qq"><i class="icon-qq"></i></a>
+		        
+					<a class="mail" target="_blank" href="mailto:yushengchu@aliyun.com" title="mail"><i class="icon-mail"></i></a>
+		        
+			</div>
+		</nav>
+	</header>		
+</div>
+
+    </div>
+    <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"><i class="icon-sort"></i></div>
+  		<h1 class="header-author js-mobile-header hide">Sandsyu</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://oif61bzoy.bkt.clouddn.com/header.png" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Sandsyu</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">隐约雷鸣 阴霾天空 但盼风雨来 能留你在此.</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/tags/测试/">测试</a></li>
+		        
+					<li><a href="/tags/APP/">移动</a></li>
+		        
+					<li><a href="/tags/服务端/">后端</a></li>
+		        
+		        
+		        	<li><a href="/archives/">所有文章</a></li>
+		        
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/yushengchu" title="github"><i class="icon-github"></i></a>
+			        
+						<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
+			        
+						<a class="qq" target="_blank" href="#" title="qq"><i class="icon-qq"></i></a>
+			        
+						<a class="mail" target="_blank" href="mailto:yushengchu@aliyun.com" title="mail"><i class="icon-mail"></i></a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div id="wrapper" class="body-wrap">
+        <div class="menu-l">
+          <div class="canvas-wrap">
+            <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
+          </div>
+          <div id="js-content" class="content-ll">
+            
+  
+    <article id="post-git使用实录 提交记录包含过大文件问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/29/git使用实录 提交记录包含过大文件问题/">git使用实录 文件过大无法提交问题解决</a>
+    </h1>
+  
+
+        <a href="/2017/04/29/git使用实录 提交记录包含过大文件问题/" class="archive-article-date">
+  	<time datetime="2017-04-29T09:26:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-29</time>
+</a>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>前言</p>
+</blockquote>
+<p>开发中遇到一个比较蛋疼的问题,因为新公司的项目是直播类型,集成网易的播放器SDK,静态库文件大小103MB超过了git提交文件的限制,且已经被我添加到commit记录中,等反应过来已经为时已晚.<br>不管是回滚还是删除对应文件亦或者添加忽略,提交时都会报文件过大的错误,记录一下自己解决的方法.<br>最后解决办法是先获取所有提交记录中大文件的列表,然后进行删除,因为涉及到对以往提交记录的修改,其实还是有一定风险的.</p>
+        
+          <a class="article-more-a" href="/2017/04/29/git使用实录 提交记录包含过大文件问题/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/APP/">APP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/04/29/git使用实录 提交记录包含过大文件问题/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-iOS开发 悬浮窗口播放器简单实现" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/29/iOS开发 悬浮窗口播放器简单实现/">iOS开发 悬浮窗口播放器简单实现</a>
+    </h1>
+  
+
+        <a href="/2017/04/29/iOS开发 悬浮窗口播放器简单实现/" class="archive-article-date">
+  	<time datetime="2017-04-29T09:26:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-29</time>
+</a>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>场景</p>
+</blockquote>
+<p>公司新项目是一个直播类型的项目,要求实现类似熊猫or斗鱼那种退出直播详情界面衔接一个悬浮(可随意拖动)的播放器继续播放.<br>考虑到无缝衔接的需求和重新加载延迟缓冲的问题,大体定下一个思路是用一个单例对象来实现这个功能,单例对象包含一个播放器对象和一些需要用的参数等.</p>
+<blockquote>
+<p>效果</p>
+</blockquote>
+<p><img src="http://oif61bzoy.bkt.clouddn.com/NEPlayer2.gif" alt="-w415"><br>
+        
+          <a class="article-more-a" href="/2017/04/29/iOS开发 悬浮窗口播放器简单实现/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/APP/">APP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/04/29/iOS开发 悬浮窗口播放器简单实现/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-使用Jenkins+Git+蒲公英搭建iOS持续集成平台" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/14/使用Jenkins+Git+蒲公英搭建iOS持续集成平台/">使用Jenkins+Git+蒲公英搭建iOS持续集成平台</a>
+    </h1>
+  
+
+        <a href="/2017/02/14/使用Jenkins+Git+蒲公英搭建iOS持续集成平台/" class="archive-article-date">
+  	<time datetime="2017-02-14T05:12:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-02-14</time>
+</a>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>Jenkins介绍</p>
+</blockquote>
+<p>Jenkins是基于Java开发的一种持续集成工具，用于监控持续重复的工作，功能包括：<br>1、持续的软件版本发布/测试项目。<br>2、监控外部调用执行的工作。</p>
+        
+          <a class="article-more-a" href="/2017/02/14/使用Jenkins+Git+蒲公英搭建iOS持续集成平台/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/app/">app</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/移动端/">移动端</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/02/14/使用Jenkins+Git+蒲公英搭建iOS持续集成平台/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-RAP+MockJS创建Mock测试数据" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/24/RAP+MockJS创建Mock测试数据/">RAP+MockJS创建Mock测试数据</a>
+    </h1>
+  
+
+        <a href="/2017/01/24/RAP+MockJS创建Mock测试数据/" class="archive-article-date">
+  	<time datetime="2017-01-24T03:10:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-24</time>
+</a>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>前言</p>
+</blockquote>
+<p>在项目开发中经常会用到模拟接口或者说是假数据,一般做法是</p>
+<ol>
+<li>读取本地json文件</li>
+<li>写死一个数据对象</li>
+<li>使用本地接口服务器</li>
+</ol>
+<p>这几种做法固然能满足开发上的需求,却无法很真实的去模拟用户使用产品时的真正情况,数据灵活性上也存在不足.</p>
+        
+          <a class="article-more-a" href="/2017/01/24/RAP+MockJS创建Mock测试数据/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/服务端/">服务端</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/测试/">测试</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/01/24/RAP+MockJS创建Mock测试数据/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-swift服务端初探1-Vapor框架的安装及基本post:get请求使用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/27/swift服务端初探1-Vapor框架的安装及基本post:get请求使用/">swift服务端初探1:Vapor框架的安装及基本post/get请求使用</a>
+    </h1>
+  
+
+        <a href="/2016/12/27/swift服务端初探1-Vapor框架的安装及基本post:get请求使用/" class="archive-article-date">
+  	<time datetime="2016-12-27T06:20:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-27</time>
+</a>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>前言</p>
+</blockquote>
+<p>距离swift发布已经过去了很长一段时间,版本也攀升到了swift3.0.2,swift可以用于开发服务端程序,这让iOS开发者有了一个用同种语言开发前后端的机会,这无疑是一件让人感到非常cool的事情.</p>
+<blockquote>
+<p>Vapor安装</p>
+</blockquote>
+<p>Vapor的安装十分简单,使用终端输出三个命令即可.</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//检查安装环境</span></div><div class="line"><span class="symbol">$</span> curl -sL check.vapor.sh | bash</div><div class="line"><span class="comment">//安装</span></div><div class="line"><span class="symbol">$</span> curl -sL toolbox.vapor.sh | bash</div><div class="line"><span class="comment">//查看是否安装成功</span></div><div class="line"><span class="symbol">$</span> vapor --help</div></pre></td></tr></table></figure>
+        
+          <a class="article-more-a" href="/2016/12/27/swift服务端初探1-Vapor框架的安装及基本post:get请求使用/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/swift/">swift</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/开发/">开发</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/服务端/">服务端</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/12/27/swift服务端初探1-Vapor框架的安装及基本post:get请求使用/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-基于Xcode的iOS原生UI测试框架 UITests使用 简单case" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/22/基于Xcode的iOS原生UI测试框架 UITests使用 简单case/">基于Xcode的iOS原生UI测试框架 UITests使用 简单case</a>
+    </h1>
+  
+
+        <a href="/2016/12/22/基于Xcode的iOS原生UI测试框架 UITests使用 简单case/" class="archive-article-date">
+  	<time datetime="2016-12-22T09:31:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-22</time>
+</a>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>前言</p>
+</blockquote>
+<p>随着APP功能的不断增加,仅仅靠黑盒测试人工来覆盖测试无疑有很大的局限性,效果也不如人意,尤其是新功能增加后可能要对旧功能做回归测试,产生了大量的重复工作,而这些重复工作有一些是可以通过自动化测试进行完成的,UITests的出现就是为了解决这个问题.</p>
+<blockquote>
+<p>UItests介绍</p>
+</blockquote>
+<p><strong>UITests是什么?</strong></p>
+<p>UItests是由苹果公司开发的一个自动测试UI交互的自动化测试框架</p>
+<p><strong>UItests能做什么?</strong></p>
+<p>UItests可以帮助我们解决一些测试上的重复工作,节省人工成本,提高测试效率等.</p>
+        
+          <a class="article-more-a" href="/2016/12/22/基于Xcode的iOS原生UI测试框架 UITests使用 简单case/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/APP/">APP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/测试/">测试</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/12/22/基于Xcode的iOS原生UI测试框架 UITests使用 简单case/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-代码解耦-iOS应用內动态跳转解决方案 Routable-iOS简单使用 " class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/22/代码解耦-iOS应用內动态跳转解决方案 Routable-iOS简单使用 /">代码解耦-iOS应用內动态跳转解决方案 Routable-iOS简单使用</a>
+    </h1>
+  
+
+        <a href="/2016/12/22/代码解耦-iOS应用內动态跳转解决方案 Routable-iOS简单使用 /" class="archive-article-date">
+  	<time datetime="2016-12-22T09:31:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-22</time>
+</a>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>前言</p>
+</blockquote>
+<p>在APP开发过程中,必然会遇到在WebView和推送消息中打开其他页面的需求,进一步则是在任何动态界面.</p>
+<p>但随着APP越来越大,功能模块越来越复杂,采用传统的控制器跳转方式,需要持有跳转对象,就会造成复杂的依赖链,代码耦合性变强.</p>
+<p>采用Routable的方式进行动态界面跳转则不会有这个问题.<br>
+        
+          <a class="article-more-a" href="/2016/12/22/代码解耦-iOS应用內动态跳转解决方案 Routable-iOS简单使用 /#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/APP/">APP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/开发/">开发</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/12/22/代码解耦-iOS应用內动态跳转解决方案 Routable-iOS简单使用 /">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-代码优化-更精简的tableView,抽离tableView DataSource Delegate" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/22/代码优化-更精简的tableView,抽离tableView DataSource Delegate/">代码优化-更精简的tableView,抽离tableView DataSource Delegate</a>
+    </h1>
+  
+
+        <a href="/2016/12/22/代码优化-更精简的tableView,抽离tableView DataSource Delegate/" class="archive-article-date">
+  	<time datetime="2016-12-22T08:52:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-22</time>
+</a>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>前言</p>
+</blockquote>
+<p>　　UITableView无疑是我们在开发iOS应用中使用频率非常高的一个控件,使用方法无外乎创建对象,关联delegate,datasource,实现对应方法.</p>
+<p>　　几乎是在每一次使用UITableView的时候,都会去调用几个固定的方法,例如</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//返回数量</span></div><div class="line"><span class="selector-tag">-</span> (NSInteger)<span class="selector-tag">tableView</span><span class="selector-pseudo">:(UITableView</span> *)<span class="selector-tag">tableView</span> <span class="selector-tag">numberOfRowsInSection</span><span class="selector-pseudo">:(NSInteger)section</span>;</div><div class="line"><span class="comment">//返回高度</span></div><div class="line"><span class="selector-tag">-</span> (CGFloat)<span class="selector-tag">tableView</span><span class="selector-pseudo">:(UITableView</span> *)<span class="selector-tag">tableView</span> <span class="selector-tag">heightForRowAtIndexPath</span><span class="selector-pseudo">:(NSIndexPath</span> *)<span class="selector-tag">indexPath</span>;</div><div class="line"><span class="comment">//返回cell实例对象</span></div><div class="line"><span class="selector-tag">-</span> (UITableViewCell *)<span class="selector-tag">tableView</span><span class="selector-pseudo">:(UITableView</span> *)<span class="selector-tag">tableView</span> <span class="selector-tag">cellForRowAtIndexPath</span><span class="selector-pseudo">:(NSIndexPath</span> *)<span class="selector-tag">indexPath</span></div><div class="line"><span class="comment">//cell点击事件</span></div><div class="line"><span class="selector-tag">-</span> (void) <span class="selector-tag">tableView</span><span class="selector-pseudo">:(UITableView</span> *)<span class="selector-tag">tableView</span> <span class="selector-tag">didSelectRowAtIndexPath</span><span class="selector-pseudo">:(NSIndexPath</span> *)<span class="selector-tag">indexPath</span></div></pre></td></tr></table></figure>
+<p>　　这无疑是多了很多重复性质的代码,是否有办法可以简化UITableView的使用,避免这些重复性质的代码,同时能兼容大部分情况UITableView的使用呢?</p>
+<p>　　将UITableView的Deleaget,DataSource抽离出来无疑是一个比较好的办法,实现一个通用的负责代理方法实现的类,通过block来回调,减少VC代码量.<br>
+        
+          <a class="article-more-a" href="/2016/12/22/代码优化-更精简的tableView,抽离tableView DataSource Delegate/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/APP/">APP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/开发/">开发</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/12/22/代码优化-更精简的tableView,抽离tableView DataSource Delegate/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-iOS实现一个类似readme.io的动效登录界面" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/22/iOS实现一个类似readme.io的动效登录界面/">iOS实现一个类似readme.io的动效登录界面</a>
+    </h1>
+  
+
+        <a href="/2016/12/22/iOS实现一个类似readme.io的动效登录界面/" class="archive-article-date">
+  	<time datetime="2016-12-22T06:36:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-22</time>
+</a>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>　　首先引入一个问题—-<strong>我们为什么需要动效设计?</strong></p>
+<p>　　我觉得cocoachina的一篇文章很好的阐述了这个问题的答案，包括加强体验舒适度，减弱不可避免的不适感等等！附链接:<a href="http://blog.jobbole.com/89556/">我们为什么需要动效设计</a></p>
+<p>　　本文所展示的动效登录界面就是参照文章中列出的<a href="https://dash.readme.io/login">readme</a>网站的登录界面所编写的~</p>
+<p>　　本文效果Demo已经上传到github，<a href="https://github.com/yushengchu/readmeLoginView">点击去下载</a>。</p>
+<p>　　最终效果展示：<br>　　<img src="http://upload-images.jianshu.io/upload_images/688404-c7dc919d467f0f2c.gif?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240/q/100" alt=""><br>
+        
+          <a class="article-more-a" href="/2016/12/22/iOS实现一个类似readme.io的动效登录界面/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/APP/">APP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/12/22/iOS实现一个类似readme.io的动效登录界面/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-iOS开发-图形验证码绘图实例" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/22/iOS开发-图形验证码绘图实例/">iOS开发-图形验证码绘图实例</a>
+    </h1>
+  
+
+        <a href="/2016/12/22/iOS开发-图形验证码绘图实例/" class="archive-article-date">
+  	<time datetime="2016-12-22T06:05:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-22</time>
+</a>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>前言:</p>
+</blockquote>
+<p>公司项目需求获取短信验证码前需要输入图形验证码防止羊毛客使用脚本批量注册平台账号<br>想了想还是自己重新实现了一下.</p>
+<blockquote>
+<p>思路</p>
+</blockquote>
+<pre><code>1.容器创建
+    1.1 代码创建
+    1.2 nib文件使用 
+2.创建验证码字符串 
+2.绘图
+    2.1 绘字
+    2.2 绘干扰线 
+4.点击刷新机制
+</code></pre>
+        
+          <a class="article-more-a" href="/2016/12/22/iOS开发-图形验证码绘图实例/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/APP/">APP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/开发/">开发</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/12/22/iOS开发-图形验证码绘图实例/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    </nav>
+  
+
+
+          </div>
+        </div>
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sandsyu
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+    <p class="copyright">本站总访问量 <span id="busuanzi_value_site_pv"></span> 次, 访客数 <span id="busuanzi_value_site_uv"></span> 人次, 本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次</p>
+  </div>
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</footer>
+    </div>
+    <script>
+	var yiliaConfig = {
+		mathjax: false,
+		isHome: true,
+		isPost: false,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: "/",
+		innerArchive: true
+	}
+</script>
+
+<script src="/./main.js?v=4.0.0.js"></script>
+
+
+    
+<div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
+  <div class="tools-wrap">
+    
+    	<section class="tools-section tools-section-all" q-show="innerArchive">
+        <div class="search-wrap">
+          <input class="search-ipt" q-model="search" type="text" placeholder="find something…">
+          <i class="icon-search icon" q-show="search|isEmptyStr"></i>
+          <i class="icon-close icon" q-show="search|isNotEmptyStr" q-on="click:clearChose(e)"></i>
+        </div>
+        <div class="widget tagcloud search-tag">
+          <p class="search-tag-wording">tag:</p>
+          <label class="search-switch">
+            <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
+          </label>
+          <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">Appium</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">unittest</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">iOS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">服务端</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">APP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">移动开发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">开发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">swift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">移动端</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">app</a>
+              </li>
+            
+            <div class="clearfix"></div>
+          </ul>
+        </div>
+        <ul class="search-ul">
+          <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
+            缺失模块。<br/>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            2、在根目录_config.yml里添加配置：
+<pre style="font-size: 12px;" q-show="jsonFail">
+  jsonContent:
+    meta: false
+    pages: false
+    posts:
+      title: true
+      date: true
+      path: true
+      text: true
+      raw: false
+      content: false
+      slug: false
+      updated: false
+      comments: false
+      link: false
+      permalink: false
+      excerpt: false
+      categories: false
+      tags: true
+</pre>
+          </p>
+          <li class="search-li" q-repeat="items" q-show="isShow">
+            <a q-attr="href:path|urlformat" class="search-title"><i class="icon-quo-left icon"></i><span q-text="title"></span></a>
+            <p class="search-time">
+              <i class="icon-calendar icon"></i>
+              <span q-text="date|dateformat"></span>
+            </p>
+            <p class="search-tag">
+              <i class="icon-price-tags icon"></i>
+              <span q-repeat="tags" q-on="click:choseTag(e, name)" q-text="name|tagformat"></span>
+            </p>
+          </li>
+        </ul>
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-friends" q-show="friends">
+  		
+        <ul class="search-ul">
+          
+            <li class="search-li">
+              <a href="http://github.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>github</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://jianshu.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>简书</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://stackoverflow.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>stackoverflow</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://segmentfault.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>segmentfault</a>
+            </li>
+          
+        </ul>
+  		
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-me" q-show="aboutme">
+  	  	
+  	  		<div class="aboutme-wrap" id="js-aboutme">&lt;span style = &quot;color:rgba(254, 65, 65, 0);&quot;&gt; 隐约雷鸣 阴霾天空&lt;br/&gt;但盼风雨来 能留你在此.&lt;/span&gt;</div>
+  	  	
+    	</section>
+    
+  </div>
+  
+</div>
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+  </div>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+</body>
+</html>

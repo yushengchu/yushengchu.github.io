@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <link rel="dns-prefetch" href="http://yoursite.com">
+  <title>iOS开发runtime笔记 | blog with sandsyu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="什么是runtime
+
+我们写的代码在程序运行过程中都会被转化为runtime的C代码执行,例如[target doSomething];会被转化为objc_msgSend(target,@selector(doSomething));.在runtime中,类用结构体来表示
+
+相关定义
+
+1234567891011//描述类中的一个方法typedef struct objc_method *Me">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS开发runtime笔记">
+<meta property="og:url" content="http://yoursite.com/2016/09/19/iOS开发-runtime笔记/index.html">
+<meta property="og:site_name" content="blog with sandsyu">
+<meta property="og:description" content="什么是runtime
+
+我们写的代码在程序运行过程中都会被转化为runtime的C代码执行,例如[target doSomething];会被转化为objc_msgSend(target,@selector(doSomething));.在runtime中,类用结构体来表示
+
+相关定义
+
+1234567891011//描述类中的一个方法typedef struct objc_method *Me">
+<meta property="og:updated_time" content="2016-12-23T08:28:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS开发runtime笔记">
+<meta name="twitter:description" content="什么是runtime
+
+我们写的代码在程序运行过程中都会被转化为runtime的C代码执行,例如[target doSomething];会被转化为objc_msgSend(target,@selector(doSomething));.在runtime中,类用结构体来表示
+
+相关定义
+
+1234567891011//描述类中的一个方法typedef struct objc_method *Me">
+  
+    <link rel="alternative" href="/atom.xml" title="blog with sandsyu" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/main.css?v=4.0.0.css">
+  
+
+  
+
+</head>
+
+<body>
+  <div id="container" q-class="show:isCtnShow">
+    <canvas id="anm-canvas" class="anm-canvas"></canvas>
+    <div class="left-col" q-class="show:isShow">
+      <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://oif61bzoy.bkt.clouddn.com/header.png" class="js-avatar">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sandsyu</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">隐约雷鸣 阴霾天空 但盼风雨来 能留你在此.</p>
+		
+
+		<nav class="header-menu">
+			<ul>
+			
+				<li><a href="/">主页</a></li>
+	        
+				<li><a href="/tags/测试/">测试</a></li>
+	        
+				<li><a href="/tags/APP/">移动</a></li>
+	        
+				<li><a href="/tags/服务端/">后端</a></li>
+	        
+			</ul>
+		</nav>
+		<nav class="header-smart-menu">
+	        
+    		
+    			
+    			<a data-idx="0" q-on="click: openSlider(e, 'innerArchive')" href="javascript:void(0)">所有文章</a>
+    			
+    			
+            
+    			
+    			<a data-idx="1" q-on="click: openSlider(e, 'friends')" href="javascript:void(0)">友链</a>
+    			
+    			
+            
+    			
+    			<a data-idx="2" q-on="click: openSlider(e, 'aboutme')" href="javascript:void(0)">关于我</a>
+    			
+    			
+            
+		</nav>
+		<nav class="header-nav">
+			<div class="social">
+				
+					<a class="github" target="_blank" href="https://github.com/yushengchu" title="github"><i class="icon-github"></i></a>
+		        
+					<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
+		        
+					<a class="qq" target="_blank" href="#" title="qq"><i class="icon-qq"></i></a>
+		        
+					<a class="mail" target="_blank" href="mailto:yushengchu@aliyun.com" title="mail"><i class="icon-mail"></i></a>
+		        
+			</div>
+		</nav>
+	</header>		
+</div>
+
+    </div>
+    <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"><i class="icon-sort"></i></div>
+  		<h1 class="header-author js-mobile-header hide">Sandsyu</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://oif61bzoy.bkt.clouddn.com/header.png" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Sandsyu</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">隐约雷鸣 阴霾天空 但盼风雨来 能留你在此.</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/tags/测试/">测试</a></li>
+		        
+					<li><a href="/tags/APP/">移动</a></li>
+		        
+					<li><a href="/tags/服务端/">后端</a></li>
+		        
+		        
+		        	<li><a href="/archives/">所有文章</a></li>
+		        
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/yushengchu" title="github"><i class="icon-github"></i></a>
+			        
+						<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
+			        
+						<a class="qq" target="_blank" href="#" title="qq"><i class="icon-qq"></i></a>
+			        
+						<a class="mail" target="_blank" href="mailto:yushengchu@aliyun.com" title="mail"><i class="icon-mail"></i></a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div id="wrapper" class="body-wrap">
+        <div class="menu-l">
+          <div class="canvas-wrap">
+            <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
+          </div>
+          <div id="js-content" class="content-ll">
+            <article id="post-iOS开发-runtime笔记" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      iOS开发runtime笔记
+    </h1>
+  
+
+        <a href="/2016/09/19/iOS开发-runtime笔记/" class="archive-article-date">
+  	<time datetime="2016-09-19T07:02:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-19</time>
+</a>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>什么是runtime</p>
+</blockquote>
+<p>我们写的代码在程序运行过程中都会被转化为runtime的C代码执行,例如<code>[target doSomething];</code>会被转化为<code>objc_msgSend(target,@selector(doSomething));</code>.<br>在runtime中,类用结构体来表示</p>
+<blockquote>
+<p>相关定义</p>
+</blockquote>
+<figure class="highlight oxygene"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//描述类中的一个方法</span></div><div class="line">typedef struct objc_method *<span class="function"><span class="keyword">Method</span>;</span></div><div class="line"></div><div class="line"><span class="comment">//实例变量</span></div><div class="line">typedef struct objc_ivar *Ivar;</div><div class="line"></div><div class="line"><span class="comment">//类别Category</span></div><div class="line">typedef struct objc_category *Category;</div><div class="line"></div><div class="line"><span class="comment">//类中声明的属性</span></div><div class="line">typedef struct objc_property *objc_property_t;</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<blockquote>
+<p>类在runtime中的表示</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//类在runtime中的表示</span></div><div class="line"><span class="keyword">struct</span> objc_class &#123;</div><div class="line">    Class isa;<span class="comment">//指针，顾名思义，表示是一个什么，</span></div><div class="line">    <span class="comment">//实例的isa指向类对象，类对象的isa指向元类</span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> !__OBJC2__</span></div><div class="line">    Class super_class;  <span class="comment">//指向父类</span></div><div class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *name;  <span class="comment">//类名</span></div><div class="line">    <span class="keyword">long</span> version;</div><div class="line">    <span class="keyword">long</span> info;</div><div class="line">    <span class="keyword">long</span> instance_size</div><div class="line">    <span class="keyword">struct</span> objc_ivar_list *ivars <span class="comment">//成员变量列表</span></div><div class="line">    <span class="keyword">struct</span> objc_method_list **methodLists; <span class="comment">//方法列表</span></div><div class="line">    <span class="keyword">struct</span> objc_cache *cache;<span class="comment">//缓存</span></div><div class="line">    <span class="comment">//一种优化，调用过的方法存入缓存列表，下次调用先找缓存</span></div><div class="line">    <span class="keyword">struct</span> objc_protocol_list *protocols <span class="comment">//协议列表</span></div><div class="line">    <span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line">&#125; OBJC2_UNAVAILABLE;</div><div class="line"><span class="comment">/* Use `Class` instead of `struct objc_class *` */</span></div></pre></td></tr></table></figure>
+<blockquote>
+<p>通过runtim获取属性列表</p>
+</blockquote>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)getMethonAndProperty&#123;</div><div class="line">    <span class="keyword">unsigned</span> <span class="keyword">int</span> count;</div><div class="line">    <span class="comment">//获取属性列表</span></div><div class="line">    objc_property_t *propertyList = class_copyPropertyList([<span class="keyword">self</span> <span class="keyword">class</span>], &amp;count);</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">unsigned</span> <span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</div><div class="line">        <span class="keyword">const</span> <span class="keyword">char</span> *propertyName = property_getName(propertyList[i]);</div><div class="line">        <span class="built_in">NSLog</span>(<span class="string">@"property------&gt;%@"</span>,[<span class="built_in">NSString</span> stringWithUTF8String:propertyName]);</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//获取方法列表</span></div><div class="line">    Method *methodList = class_copyMethodList([<span class="keyword">self</span> <span class="keyword">class</span>], &amp;count);</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">unsigned</span> <span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</div><div class="line">        Method method = methodList[i];</div><div class="line">        <span class="built_in">NSLog</span>(<span class="string">@"method------&gt;%@"</span>,<span class="built_in">NSStringFromSelector</span>(method_getName(method)));</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">//获取成员变量列表</span></div><div class="line">    Ivar *ivarList = class_copyIvarList([<span class="keyword">self</span> <span class="keyword">class</span>], &amp;count);</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">unsigned</span> <span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</div><div class="line">        Ivar myIvar = ivarList[i];</div><div class="line">        <span class="built_in">NSLog</span>(<span class="string">@"myIvar------&gt;%@"</span>,[<span class="built_in">NSString</span> stringWithUTF8String:ivar_getName(myIvar)]);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">//获取协议</span></div><div class="line">    __<span class="keyword">unsafe_unretained</span> Protocol **protocolList = class_copyProtocolList([<span class="keyword">self</span> <span class="keyword">class</span>], &amp;count);</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">unsigned</span> <span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</div><div class="line">        Protocol* mypro = protocolList[i];</div><div class="line">        <span class="built_in">NSLog</span>(<span class="string">@"prorocol------&gt;%@"</span>,[<span class="built_in">NSString</span> stringWithUTF8String:protocol_getName(mypro)]);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>方法调用</p>
+</blockquote>
+<p><strong>如果实例对象调用实例方法,会到实例的isa指针指向的对象操作</strong><br><strong>如果是调用类方法,就会到类对象的isa指针指向的对象中操作</strong></p>
+<p>1.先在相应操作的对象中的缓存方法列表去找调用的方法,找到则实现<br>2.如果没找到则去相应对象的方法列表去找,找到则实现<br>3.如果没找到则去相应对象的父类指针所指向的对象中执行1,2,找到则执行<br>4.一直没找到,转向拦截调用,没有重写拦截调用的方法,则报错.</p>
+<p><strong>重写父类的方法并不是覆盖父类的方法,而是在子类对象中找到这个方法后就不会再去父类中寻找</strong></p>
+<blockquote>
+<p>拦截调用</p>
+</blockquote>
+<p>在方法调用中说到,如果找不到方法会转向拦截,那拦截调用时什么??<br>拦截调用就是在找不到调用的方法,程序崩溃之前,你可以通过重写NSObjct的四个方法来处理.</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">+ (BOOL)<span class="string">resolveClassMethod:</span>(SEL)sel;</div><div class="line">+ (BOOL)<span class="string">resolveInstanceMethod:</span>(SEL)sel;</div><div class="line"><span class="comment">//后两个方法需要转发到其他的类处理</span></div><div class="line">- (id)<span class="string">forwardingTargetForSelector:</span>(SEL)aSelector;</div><div class="line">- (<span class="keyword">void</span>)<span class="string">forwardInvocation:</span>(NSInvocation *)anInvocation;</div></pre></td></tr></table></figure>
+<ul>
+<li>第一个方法是当你调用一个不存在的类方法的时候，会调用这个方法，默认返回NO，你可以加上自己的处理然后返回YES。</li>
+<li>第二个方法和第一个方法相似，只不过处理的是实例方法。</li>
+<li>第三个方法是将你调用的不存在的方法重定向到一个其他声明了这个方法的类，只需要你返回一个有这个方法的target。</li>
+<li>第四个方法是将你调用的不存在的方法打包成<code>NSInvocation</code>传给你。做完你自己的处理后，调用<code>invokeWithTarget:</code>方法让某个target触发这个方法。</li>
+</ul>
+<blockquote>
+<p>动态添加方法</p>
+</blockquote>
+<p>重写了拦截调用的方法切返回了YES,我们要怎么处理呢?<br>有一个办法是根据传进来的<code>SEL</code>类型的selector动态添加一个方法</p>
+<p>首先从外部隐式调用一个不存在的方法</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/APP/">APP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/移动开发/">移动开发</a></li></ul>
+	</div>
+
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2016/09/19/iOS开发-runtime笔记/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2016/12/20/unittest测试案例编写思路/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          unittest单元测试案例编写思路
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+
+
+
+
+
+
+
+
+          </div>
+        </div>
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sandsyu
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+    <p class="copyright">本站总访问量 <span id="busuanzi_value_site_pv"></span> 次, 访客数 <span id="busuanzi_value_site_uv"></span> 人次, 本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次</p>
+  </div>
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</footer>
+    </div>
+    <script>
+	var yiliaConfig = {
+		mathjax: false,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: "/",
+		innerArchive: true
+	}
+</script>
+
+<script src="/./main.js?v=4.0.0.js"></script>
+
+
+    
+<div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
+  <div class="tools-wrap">
+    
+    	<section class="tools-section tools-section-all" q-show="innerArchive">
+        <div class="search-wrap">
+          <input class="search-ipt" q-model="search" type="text" placeholder="find something…">
+          <i class="icon-search icon" q-show="search|isEmptyStr"></i>
+          <i class="icon-close icon" q-show="search|isNotEmptyStr" q-on="click:clearChose(e)"></i>
+        </div>
+        <div class="widget tagcloud search-tag">
+          <p class="search-tag-wording">tag:</p>
+          <label class="search-switch">
+            <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
+          </label>
+          <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">Appium</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">unittest</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">iOS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">服务端</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">APP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">移动开发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">开发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">swift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">移动端</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">app</a>
+              </li>
+            
+            <div class="clearfix"></div>
+          </ul>
+        </div>
+        <ul class="search-ul">
+          <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
+            缺失模块。<br/>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            2、在根目录_config.yml里添加配置：
+<pre style="font-size: 12px;" q-show="jsonFail">
+  jsonContent:
+    meta: false
+    pages: false
+    posts:
+      title: true
+      date: true
+      path: true
+      text: true
+      raw: false
+      content: false
+      slug: false
+      updated: false
+      comments: false
+      link: false
+      permalink: false
+      excerpt: false
+      categories: false
+      tags: true
+</pre>
+          </p>
+          <li class="search-li" q-repeat="items" q-show="isShow">
+            <a q-attr="href:path|urlformat" class="search-title"><i class="icon-quo-left icon"></i><span q-text="title"></span></a>
+            <p class="search-time">
+              <i class="icon-calendar icon"></i>
+              <span q-text="date|dateformat"></span>
+            </p>
+            <p class="search-tag">
+              <i class="icon-price-tags icon"></i>
+              <span q-repeat="tags" q-on="click:choseTag(e, name)" q-text="name|tagformat"></span>
+            </p>
+          </li>
+        </ul>
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-friends" q-show="friends">
+  		
+        <ul class="search-ul">
+          
+            <li class="search-li">
+              <a href="http://github.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>github</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://jianshu.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>简书</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://stackoverflow.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>stackoverflow</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://segmentfault.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>segmentfault</a>
+            </li>
+          
+        </ul>
+  		
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-me" q-show="aboutme">
+  	  	
+  	  		<div class="aboutme-wrap" id="js-aboutme">&lt;span style = &quot;color:rgba(254, 65, 65, 0);&quot;&gt; 隐约雷鸣 阴霾天空&lt;br/&gt;但盼风雨来 能留你在此.&lt;/span&gt;</div>
+  	  	
+    	</section>
+    
+  </div>
+  
+</div>
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+  </div>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+</body>
+</html>

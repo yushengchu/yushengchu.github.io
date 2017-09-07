@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <link rel="dns-prefetch" href="http://yoursite.com">
+  <title>使用Jenkins+Git+蒲公英搭建iOS持续集成平台 | blog with sandsyu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Jenkins介绍
+
+Jenkins是基于Java开发的一种持续集成工具，用于监控持续重复的工作，功能包括：1、持续的软件版本发布/测试项目。2、监控外部调用执行的工作。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Jenkins+Git+蒲公英搭建iOS持续集成平台">
+<meta property="og:url" content="http://yoursite.com/2017/02/14/使用Jenkins+Git+蒲公英搭建iOS持续集成平台/index.html">
+<meta property="og:site_name" content="blog with sandsyu">
+<meta property="og:description" content="Jenkins介绍
+
+Jenkins是基于Java开发的一种持续集成工具，用于监控持续重复的工作，功能包括：1、持续的软件版本发布/测试项目。2、监控外部调用执行的工作。">
+<meta property="og:image" content="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872934225188.jpg">
+<meta property="og:image" content="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872934575328.jpg">
+<meta property="og:image" content="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872934734454.jpg">
+<meta property="og:image" content="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872958115233.jpg">
+<meta property="og:image" content="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872962648610.jpg">
+<meta property="og:image" content="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872963582062.jpg">
+<meta property="og:image" content="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872965208131.jpg">
+<meta property="og:image" content="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872967323098.jpg">
+<meta property="og:image" content="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872968519749.jpg">
+<meta property="og:image" content="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872969457242.jpg">
+<meta property="og:image" content="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872974070906.jpg">
+<meta property="og:image" content="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872977596802.jpg">
+<meta property="og:image" content="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872981444109.jpg">
+<meta property="og:image" content="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872981718036.jpg">
+<meta property="og:image" content="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872983153771.jpg">
+<meta property="og:image" content="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872984468868.jpg">
+<meta property="og:image" content="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872984654900.jpg">
+<meta property="og:image" content="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872987618170.jpg">
+<meta property="og:updated_time" content="2017-02-21T14:12:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Jenkins+Git+蒲公英搭建iOS持续集成平台">
+<meta name="twitter:description" content="Jenkins介绍
+
+Jenkins是基于Java开发的一种持续集成工具，用于监控持续重复的工作，功能包括：1、持续的软件版本发布/测试项目。2、监控外部调用执行的工作。">
+<meta name="twitter:image" content="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872934225188.jpg">
+  
+    <link rel="alternative" href="/atom.xml" title="blog with sandsyu" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/main.css?v=4.0.0.css">
+  
+
+  
+
+</head>
+
+<body>
+  <div id="container" q-class="show:isCtnShow">
+    <canvas id="anm-canvas" class="anm-canvas"></canvas>
+    <div class="left-col" q-class="show:isShow">
+      <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://oif61bzoy.bkt.clouddn.com/header.png" class="js-avatar">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sandsyu</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">隐约雷鸣 阴霾天空 但盼风雨来 能留你在此.</p>
+		
+
+		<nav class="header-menu">
+			<ul>
+			
+				<li><a href="/">主页</a></li>
+	        
+				<li><a href="/tags/测试/">测试</a></li>
+	        
+				<li><a href="/tags/APP/">移动</a></li>
+	        
+				<li><a href="/tags/服务端/">后端</a></li>
+	        
+			</ul>
+		</nav>
+		<nav class="header-smart-menu">
+	        
+    		
+    			
+    			<a data-idx="0" q-on="click: openSlider(e, 'innerArchive')" href="javascript:void(0)">所有文章</a>
+    			
+    			
+            
+    			
+    			<a data-idx="1" q-on="click: openSlider(e, 'friends')" href="javascript:void(0)">友链</a>
+    			
+    			
+            
+    			
+    			<a data-idx="2" q-on="click: openSlider(e, 'aboutme')" href="javascript:void(0)">关于我</a>
+    			
+    			
+            
+		</nav>
+		<nav class="header-nav">
+			<div class="social">
+				
+					<a class="github" target="_blank" href="https://github.com/yushengchu" title="github"><i class="icon-github"></i></a>
+		        
+					<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
+		        
+					<a class="qq" target="_blank" href="#" title="qq"><i class="icon-qq"></i></a>
+		        
+					<a class="mail" target="_blank" href="mailto:yushengchu@aliyun.com" title="mail"><i class="icon-mail"></i></a>
+		        
+			</div>
+		</nav>
+	</header>		
+</div>
+
+    </div>
+    <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"><i class="icon-sort"></i></div>
+  		<h1 class="header-author js-mobile-header hide">Sandsyu</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://oif61bzoy.bkt.clouddn.com/header.png" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Sandsyu</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">隐约雷鸣 阴霾天空 但盼风雨来 能留你在此.</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/tags/测试/">测试</a></li>
+		        
+					<li><a href="/tags/APP/">移动</a></li>
+		        
+					<li><a href="/tags/服务端/">后端</a></li>
+		        
+		        
+		        	<li><a href="/archives/">所有文章</a></li>
+		        
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/yushengchu" title="github"><i class="icon-github"></i></a>
+			        
+						<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
+			        
+						<a class="qq" target="_blank" href="#" title="qq"><i class="icon-qq"></i></a>
+			        
+						<a class="mail" target="_blank" href="mailto:yushengchu@aliyun.com" title="mail"><i class="icon-mail"></i></a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div id="wrapper" class="body-wrap">
+        <div class="menu-l">
+          <div class="canvas-wrap">
+            <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
+          </div>
+          <div id="js-content" class="content-ll">
+            <article id="post-使用Jenkins+Git+蒲公英搭建iOS持续集成平台" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用Jenkins+Git+蒲公英搭建iOS持续集成平台
+    </h1>
+  
+
+        <a href="/2017/02/14/使用Jenkins+Git+蒲公英搭建iOS持续集成平台/" class="archive-article-date">
+  	<time datetime="2017-02-14T05:12:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-02-14</time>
+</a>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>Jenkins介绍</p>
+</blockquote>
+<p>Jenkins是基于Java开发的一种持续集成工具，用于监控持续重复的工作，功能包括：<br>1、持续的软件版本发布/测试项目。<br>2、监控外部调用执行的工作。</p>
+<a id="more"></a>
+<p>-</p>
+<blockquote>
+<p>Jenkins安装</p>
+</blockquote>
+<p>Jenkins可以通过命令行安装,也可以通过pkg文件安装,下载地址<a href="https://jenkins.io/index.html" target="_blank" rel="external">https://jenkins.io/index.html</a><br><img src="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872934225188.jpg" alt=""></p>
+<p><img src="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872934575328.jpg" alt=""></p>
+<p><img src="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872934734454.jpg" alt=""></p>
+<p>安装完成之后可以在Terminal中通过命令启动Jenkins.</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//启动Jenkins</span></div><div class="line"><span class="built_in">open</span> /Applications/Jenkins/jenkins.war</div></pre></td></tr></table></figure>
+<p>启动后在浏览器地址框输入<code>http://localhost:8080/</code>就可以打开Jenkins界面<br><img src="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872958115233.jpg" alt=""></p>
+<h4 id="注-默认端口是8080-如果8080端口被占用可以通过Terminal命令来改变Jenkins的启动端口"><a href="#注-默认端口是8080-如果8080端口被占用可以通过Terminal命令来改变Jenkins的启动端口" class="headerlink" title="注:默认端口是8080,如果8080端口被占用可以通过Terminal命令来改变Jenkins的启动端口"></a>注:默认端口是8080,如果8080端口被占用可以通过Terminal命令来改变Jenkins的启动端口</h4><figure class="highlight delphi"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">defaults <span class="keyword">write</span> /<span class="keyword">Library</span>/Preferences/org.jenkins-ci httpPort <span class="number">7070</span></div></pre></td></tr></table></figure>
+<p>-</p>
+<blockquote>
+<p>Jenkins构建配置</p>
+</blockquote>
+<p>####1.插件安装<br>需要安装四个插件:</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Xcode integration</div><div class="line">GIT <span class="keyword">plugin</span></div><div class="line"><span class="keyword">Post</span>-Build Script Plug-<span class="keyword">in</span></div><div class="line">GitHub <span class="keyword">plugin</span></div></pre></td></tr></table></figure>
+<p>安装方法:<br><img src="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872962648610.jpg" alt=""></p>
+<p><img src="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872963582062.jpg" alt=""></p>
+<p>####2.创建-配置项目<br>2.1点击新建-输入项目名称-构建一个自由风格的软件项目<br><img src="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872965208131.jpg" alt=""></p>
+<p>2.2设置源码<br><img src="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872967323098.jpg" alt=""></p>
+<p>设置SSH key<br><img src="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872968519749.jpg" alt=""></p>
+<p>2.3构建<br><img src="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872969457242.jpg" alt=""></p>
+<p>设置<strong>General build settings</strong>信息<br><img src="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872974070906.jpg" alt=""></p>
+<p>设置<strong>Code signing &amp; OS X keychain options</strong><br><img src="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872977596802.jpg" alt=""></p>
+<p>####注:keychian文件地址为${HOME}/Library/Keychains/login.keychain</p>
+<p>2.4设置构建后操作-上传到蒲公英<br><img src="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872981444109.jpg" alt=""></p>
+<p><img src="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872981718036.jpg" alt=""></p>
+<p><img src="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872983153771.jpg" alt=""></p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="regexp">//</span>蒲公英上传脚本代码</div><div class="line">curl -F <span class="string">"ipa文件地址"</span> -F <span class="string">"uKey=用户uKey"</span> -F <span class="string">"_api_key=_api_key"</span> https:<span class="regexp">//</span>qiniu-storage.pgyer.com<span class="regexp">/apiv1/</span>app<span class="regexp">/upload</span></div></pre></td></tr></table></figure>
+<p>2.5点击保存-返回项目首页点击构建<br><img src="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872984468868.jpg" alt=""></p>
+<p>蒲公英上的项目也正常上传了.<br><img src="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872984654900.jpg" alt=""></p>
+<p>-</p>
+<blockquote>
+<p>自定义网页展示</p>
+</blockquote>
+<p>蒲公英提供了开放API可以查询我们上传的APP,具体信息查看蒲公英开放文档.<br><a href="https://www.pgyer.com/doc/api#paramInfo" target="_blank" rel="external">https://www.pgyer.com/doc/api#paramInfo</a><br>这里使用viewGroup接口,获取上传的APP所有版本信息 并在网页上展示,方便测试人员进行扫码安装</p>
+<p>注:如果不是企业账号打包的ipa文件 需要提前将测试人员的测试设备添加到开发者账号中</p>
+<p>效果展示:<br><img src="http://oif61bzoy.bkt.clouddn.com/JenkinsPlatform14872987618170.jpg" alt=""></p>
+<p>自定义网页项目代码地址:<br><a href="https://github.com/yushengchu/JenkinsPlatform" target="_blank" rel="external">https://github.com/yushengchu/JenkinsPlatform</a></p>
+<p>觉得有用的小伙伴不妨点个start!</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/app/">app</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/移动端/">移动端</a></li></ul>
+	</div>
+
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/02/14/使用Jenkins+Git+蒲公英搭建iOS持续集成平台/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2017/04/29/iOS开发 悬浮窗口播放器简单实现/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          iOS开发 悬浮窗口播放器简单实现
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/01/24/RAP+MockJS创建Mock测试数据/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">RAP+MockJS创建Mock测试数据</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+
+
+
+          </div>
+        </div>
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sandsyu
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+    <p class="copyright">本站总访问量 <span id="busuanzi_value_site_pv"></span> 次, 访客数 <span id="busuanzi_value_site_uv"></span> 人次, 本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次</p>
+  </div>
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</footer>
+    </div>
+    <script>
+	var yiliaConfig = {
+		mathjax: false,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: "/",
+		innerArchive: true
+	}
+</script>
+
+<script src="/./main.js?v=4.0.0.js"></script>
+
+
+    
+<div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
+  <div class="tools-wrap">
+    
+    	<section class="tools-section tools-section-all" q-show="innerArchive">
+        <div class="search-wrap">
+          <input class="search-ipt" q-model="search" type="text" placeholder="find something…">
+          <i class="icon-search icon" q-show="search|isEmptyStr"></i>
+          <i class="icon-close icon" q-show="search|isNotEmptyStr" q-on="click:clearChose(e)"></i>
+        </div>
+        <div class="widget tagcloud search-tag">
+          <p class="search-tag-wording">tag:</p>
+          <label class="search-switch">
+            <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
+          </label>
+          <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">Appium</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">unittest</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">iOS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">服务端</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">APP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">移动开发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">开发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">swift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">移动端</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">app</a>
+              </li>
+            
+            <div class="clearfix"></div>
+          </ul>
+        </div>
+        <ul class="search-ul">
+          <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
+            缺失模块。<br/>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            2、在根目录_config.yml里添加配置：
+<pre style="font-size: 12px;" q-show="jsonFail">
+  jsonContent:
+    meta: false
+    pages: false
+    posts:
+      title: true
+      date: true
+      path: true
+      text: true
+      raw: false
+      content: false
+      slug: false
+      updated: false
+      comments: false
+      link: false
+      permalink: false
+      excerpt: false
+      categories: false
+      tags: true
+</pre>
+          </p>
+          <li class="search-li" q-repeat="items" q-show="isShow">
+            <a q-attr="href:path|urlformat" class="search-title"><i class="icon-quo-left icon"></i><span q-text="title"></span></a>
+            <p class="search-time">
+              <i class="icon-calendar icon"></i>
+              <span q-text="date|dateformat"></span>
+            </p>
+            <p class="search-tag">
+              <i class="icon-price-tags icon"></i>
+              <span q-repeat="tags" q-on="click:choseTag(e, name)" q-text="name|tagformat"></span>
+            </p>
+          </li>
+        </ul>
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-friends" q-show="friends">
+  		
+        <ul class="search-ul">
+          
+            <li class="search-li">
+              <a href="http://github.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>github</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://jianshu.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>简书</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://stackoverflow.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>stackoverflow</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://segmentfault.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>segmentfault</a>
+            </li>
+          
+        </ul>
+  		
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-me" q-show="aboutme">
+  	  	
+  	  		<div class="aboutme-wrap" id="js-aboutme">&lt;span style = &quot;color:rgba(254, 65, 65, 0);&quot;&gt; 隐约雷鸣 阴霾天空&lt;br/&gt;但盼风雨来 能留你在此.&lt;/span&gt;</div>
+  	  	
+    	</section>
+    
+  </div>
+  
+</div>
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+  </div>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+</body>
+</html>
