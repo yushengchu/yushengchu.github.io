@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <link rel="dns-prefetch" href="http://yoursite.com">
+  <title>React-Native 不使用第三方服务实现iOS&amp;Android增量热更新 | blog with sandsyu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="流程图:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React-Native 不使用第三方服务实现iOS&Android增量热更新">
+<meta property="og:url" content="http://yoursite.com/2017/09/07/React-Native 不使用第三方服务实现iOS&Android增量热更新/index.html">
+<meta property="og:site_name" content="blog with sandsyu">
+<meta property="og:description" content="流程图:">
+<meta property="og:image" content="http://oif61bzoy.bkt.clouddn.com/15047699265651.jpg">
+<meta property="og:updated_time" content="2017-09-07T12:18:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="React-Native 不使用第三方服务实现iOS&Android增量热更新">
+<meta name="twitter:description" content="流程图:">
+<meta name="twitter:image" content="http://oif61bzoy.bkt.clouddn.com/15047699265651.jpg">
+  
+    <link rel="alternative" href="/atom.xml" title="blog with sandsyu" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/main.css?v=4.0.0.css">
+  
+
+  
+
+</head>
+
+<body>
+  <div id="container" q-class="show:isCtnShow">
+    <canvas id="anm-canvas" class="anm-canvas"></canvas>
+    <div class="left-col" q-class="show:isShow">
+      <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			<img src="http://oif61bzoy.bkt.clouddn.com/header.png" class="js-avatar">
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">Sandsyu</a></h1>
+		</hgroup>
+
+		
+		<p class="header-subtitle">隐约雷鸣 阴霾天空 但盼风雨来 能留你在此.</p>
+		
+
+		<nav class="header-menu">
+			<ul>
+			
+				<li><a href="/">主页</a></li>
+	        
+				<li><a href="/tags/测试/">测试</a></li>
+	        
+				<li><a href="/tags/APP/">移动</a></li>
+	        
+				<li><a href="/tags/服务端/">后端</a></li>
+	        
+			</ul>
+		</nav>
+		<nav class="header-smart-menu">
+	        
+    		
+    			
+    			<a data-idx="0" q-on="click: openSlider(e, 'innerArchive')" href="javascript:void(0)">所有文章</a>
+    			
+    			
+            
+    			
+    			<a data-idx="1" q-on="click: openSlider(e, 'friends')" href="javascript:void(0)">友链</a>
+    			
+    			
+            
+    			
+    			<a data-idx="2" q-on="click: openSlider(e, 'aboutme')" href="javascript:void(0)">关于我</a>
+    			
+    			
+            
+		</nav>
+		<nav class="header-nav">
+			<div class="social">
+				
+					<a class="github" target="_blank" href="https://github.com/yushengchu" title="github"><i class="icon-github"></i></a>
+		        
+					<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
+		        
+					<a class="qq" target="_blank" href="#" title="qq"><i class="icon-qq"></i></a>
+		        
+					<a class="mail" target="_blank" href="mailto:yushengchu@aliyun.com" title="mail"><i class="icon-mail"></i></a>
+		        
+			</div>
+		</nav>
+	</header>		
+</div>
+
+    </div>
+    <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"><i class="icon-sort"></i></div>
+  		<h1 class="header-author js-mobile-header hide">Sandsyu</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				<img src="http://oif61bzoy.bkt.clouddn.com/header.png" class="js-avatar">
+			</div>
+			<hgroup>
+			  <h1 class="header-author">Sandsyu</h1>
+			</hgroup>
+			
+			<p class="header-subtitle">隐约雷鸣 阴霾天空 但盼风雨来 能留你在此.</p>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">主页</a></li>
+		        
+					<li><a href="/tags/测试/">测试</a></li>
+		        
+					<li><a href="/tags/APP/">移动</a></li>
+		        
+					<li><a href="/tags/服务端/">后端</a></li>
+		        
+		        
+		        	<li><a href="/archives/">所有文章</a></li>
+		        
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/yushengchu" title="github"><i class="icon-github"></i></a>
+			        
+						<a class="zhihu" target="_blank" href="#" title="zhihu"><i class="icon-zhihu"></i></a>
+			        
+						<a class="qq" target="_blank" href="#" title="qq"><i class="icon-qq"></i></a>
+			        
+						<a class="mail" target="_blank" href="mailto:yushengchu@aliyun.com" title="mail"><i class="icon-mail"></i></a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div id="wrapper" class="body-wrap">
+        <div class="menu-l">
+          <div class="canvas-wrap">
+            <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
+          </div>
+          <div id="js-content" class="content-ll">
+            <article id="post-React-Native 不使用第三方服务实现iOS&amp;Android增量热更新" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      React-Native 不使用第三方服务实现iOS&amp;Android增量热更新
+    </h1>
+  
+
+        <a href="/2017/09/07/React-Native 不使用第三方服务实现iOS&Android增量热更新/" class="archive-article-date">
+  	<time datetime="2017-09-07T06:08:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-07</time>
+</a>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>流程图:<br>    <img src="http://oif61bzoy.bkt.clouddn.com/15047699265651.jpg" alt=""></p>
+</blockquote>
+<a id="more"></a>
+<p>#####简单实现:<br>iOS Demo地址:<a href="https://github.com/yushengchu/Incremental-hot-update" target="_blank" rel="external">https://github.com/yushengchu/Incremental-hot-update</a></p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 热更细管理类</span></div><div class="line"><span class="comment">//  HotUpdataManage.h</span></div><div class="line"><span class="comment">//  hotUpdataDemo</span></div><div class="line"><span class="comment">//</span></div><div class="line"><span class="comment">//  Created by joker on 2017/9/7.</span></div><div class="line"><span class="comment">//  Copyright © 2017年 Facebook. All rights reserved.</span></div><div class="line"><span class="comment">//</span></div><div class="line"></div><div class="line"><span class="meta">#import <span class="meta-string">&lt;Foundation/Foundation.h&gt;</span></span></div><div class="line"><span class="meta">#import <span class="meta-string">&lt;React/RCTBundleURLProvider.h&gt;</span></span></div><div class="line"><span class="meta">#import <span class="meta-string">&lt;React/RCTRootView.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">HotUpdataManage</span> : <span class="title">NSObject</span></span></div><div class="line"></div><div class="line"><span class="comment">//单例方法</span></div><div class="line">+ (HotUpdataManage*)getInstance;</div><div class="line"></div><div class="line"><span class="comment">//获取加载URL</span></div><div class="line">- (<span class="built_in">NSURL</span>*)getBridge;</div><div class="line"></div><div class="line"><span class="comment">//检查更新</span></div><div class="line">- (<span class="keyword">void</span>)checkUpdate:(<span class="built_in">NSString</span>*)checkUrl;</div><div class="line"></div><div class="line"><span class="comment">//bridge对象 用于重新载入jsbundle</span></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">strong</span>) RCTBridge *bridge;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//</span></div><div class="line"><span class="comment">//  HotUpdataManage.m</span></div><div class="line"><span class="comment">//  hotUpdataDemo</span></div><div class="line"><span class="comment">//</span></div><div class="line"><span class="comment">//  Created by joker on 2017/9/7.</span></div><div class="line"><span class="comment">//  Copyright © 2017年 Facebook. All rights reserved.</span></div><div class="line"><span class="comment">//</span></div><div class="line"></div><div class="line"><span class="meta">#import <span class="meta-string">"HotUpdataManage.h"</span></span></div><div class="line"><span class="meta">#import <span class="meta-string">"MXHZIPArchive.h"</span></span></div><div class="line"><span class="meta">#import <span class="meta-string">"DiffPatch.h"</span></span></div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">#define HOT_MAIN_DOC_PATH [NSString stringWithFormat:@<span class="meta-string">"%@/HOTSDK/main"</span>,NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0]]</span></div><div class="line"><span class="meta">#define HOT_JS_PATH [NSString stringWithFormat:@<span class="meta-string">"%@/HOTSDK/main/%@"</span>,NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0],@<span class="meta-string">"main.jsbundle"</span>]</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">HotUpdataManage</span></span></div><div class="line"></div><div class="line">+ (HotUpdataManage*)getInstance&#123;</div><div class="line">  <span class="keyword">static</span> HotUpdataManage *manager;</div><div class="line">  <span class="keyword">static</span> <span class="built_in">dispatch_once_t</span> onceToken;</div><div class="line">  <span class="built_in">dispatch_once</span>(&amp;onceToken, ^&#123;</div><div class="line">    manager = [[HotUpdataManage alloc] init];</div><div class="line">  &#125;);</div><div class="line">  <span class="keyword">return</span> manager;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="meta">#pragma mark 获取bridge</span></div><div class="line">- (<span class="built_in">NSURL</span>*)getBridge&#123;</div><div class="line">  <span class="built_in">NSFileManager</span> *fileManager =[<span class="built_in">NSFileManager</span> defaultManager];</div><div class="line">  <span class="keyword">if</span> (![fileManager fileExistsAtPath:HOT_JS_PATH]) &#123;</div><div class="line">    <span class="built_in">NSString</span>* zipPatch = [[<span class="built_in">NSBundle</span> mainBundle] pathForResource:<span class="string">@"bundle"</span> ofType:<span class="string">@"zip"</span>];</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"zipPatch ---&gt; %@"</span>,zipPatch);</div><div class="line">    <span class="keyword">if</span>([fileManager fileExistsAtPath:zipPatch])&#123;</div><div class="line">      <span class="built_in">BOOL</span> isReload = [<span class="keyword">self</span> unzipBundleAndReload:zipPatch];</div><div class="line">      <span class="comment">//复制jsbundle文件和assest文件到到对应目录</span></div><div class="line">      <span class="keyword">if</span> (isReload) &#123;</div><div class="line">        <span class="keyword">return</span> [<span class="built_in">NSURL</span> URLWithString:HOT_JS_PATH];</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> [<span class="built_in">NSURL</span> URLWithString:HOT_JS_PATH];</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="meta">#pragma mark 检查更新</span></div><div class="line">- (<span class="keyword">void</span>)checkUpdate:(<span class="built_in">NSString</span>*)urlStr&#123;</div><div class="line">    <span class="built_in">NSURL</span> *url = [<span class="built_in">NSURL</span> URLWithString: urlStr];</div><div class="line">    <span class="built_in">NSMutableURLRequest</span> *request = [[<span class="built_in">NSMutableURLRequest</span> alloc]initWithURL: url cachePolicy: <span class="built_in">NSURLRequestUseProtocolCachePolicy</span> timeoutInterval: <span class="number">10</span>];</div><div class="line">    [request setHTTPMethod: <span class="string">@"GET"</span>];</div><div class="line">    <span class="built_in">NSData</span>   *data = [<span class="built_in">NSURLConnection</span> sendSynchronousRequest:request</div><div class="line">                                           returningResponse:<span class="literal">nil</span></div><div class="line">                                                       error:<span class="literal">nil</span>];</div><div class="line">    <span class="keyword">if</span> (data)&#123;</div><div class="line">      <span class="built_in">NSDictionary</span> *resultInfo = [<span class="built_in">NSJSONSerialization</span> JSONObjectWithData:data options:<span class="built_in">NSJSONReadingAllowFragments</span> error:<span class="literal">nil</span>];</div><div class="line">      <span class="keyword">if</span> ([resultInfo[<span class="string">@"isUpdate"</span>] boolValue]) &#123;</div><div class="line">        [<span class="keyword">self</span> downLoadFile:[resultInfo objectForKey:<span class="string">@"updataUrl"</span>]];</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="meta">#pragma mark 下载</span></div><div class="line">- (<span class="keyword">void</span>)downLoadFile:(<span class="built_in">NSString</span> *)urlString&#123;</div><div class="line">  <span class="built_in">NSURL</span> *url = [<span class="built_in">NSURL</span> URLWithString:urlString];</div><div class="line">  <span class="built_in">NSMutableURLRequest</span> *request = [[<span class="built_in">NSMutableURLRequest</span> alloc]initWithURL: url cachePolicy: <span class="built_in">NSURLRequestUseProtocolCachePolicy</span> timeoutInterval: <span class="number">10</span>];</div><div class="line">  [request setHTTPMethod: <span class="string">@"GET"</span>];</div><div class="line">  <span class="built_in">NSData</span> *data = [<span class="built_in">NSURLConnection</span> sendSynchronousRequest:request returningResponse:<span class="literal">nil</span> error:<span class="literal">nil</span>];</div><div class="line">  <span class="keyword">if</span> (data)&#123;</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"diff下载成功"</span>);</div><div class="line">    <span class="built_in">NSString</span> *pacthPath = [<span class="keyword">self</span> getFilePath:<span class="string">@"diff.patch"</span>];</div><div class="line">    <span class="keyword">if</span> ([data writeToFile:pacthPath atomically:<span class="literal">YES</span>]) &#123;</div><div class="line">      [<span class="keyword">self</span> patchBundle:pacthPath];</div><div class="line">    &#125;<span class="keyword">else</span>&#123;</div><div class="line">      <span class="built_in">NSLog</span>(<span class="string">@"diff保存失败."</span>);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">else</span> &#123;</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"diff下载失败"</span>);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)patchBundle:(<span class="built_in">NSString</span>*)pacthPath&#123;</div><div class="line">  <span class="built_in">NSString</span>* zipPatch = [[<span class="built_in">NSBundle</span> mainBundle] pathForResource:<span class="string">@"bundle"</span> ofType:<span class="string">@"zip"</span>];</div><div class="line">  <span class="built_in">NSString</span>* tmpZipPath = [<span class="built_in">NSString</span> stringWithFormat:<span class="string">@"%@/tmp.zip"</span>,HOT_MAIN_DOC_PATH];</div><div class="line">  <span class="comment">//  创建最新jsbundel文件</span></div><div class="line">  <span class="built_in">BOOL</span> writeBundel =   [DiffPatch beginPatch:pacthPath origin:zipPatch toDestination:tmpZipPath];</div><div class="line">  <span class="keyword">if</span> (!writeBundel) &#123;</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"bundel写入失败"</span>);</div><div class="line">    <span class="keyword">return</span>;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">if</span> ([<span class="keyword">self</span> unzipBundleAndReload:tmpZipPath]) &#123;</div><div class="line">    [<span class="keyword">self</span> reloadNow];</div><div class="line">  &#125;</div><div class="line">  <span class="built_in">NSLog</span>(<span class="string">@"更新成功"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="meta">#pragma mark 解压</span></div><div class="line">-(<span class="built_in">BOOL</span>)unzipBundleAndReload:(<span class="built_in">NSString</span>*)zipPath&#123;</div><div class="line">  <span class="comment">//获取zipPath</span></div><div class="line">  <span class="built_in">NSError</span> *error;</div><div class="line">  <span class="built_in">NSString</span> *reload_zipPath = zipPath;</div><div class="line">  <span class="built_in">NSString</span> *desPath = HOT_MAIN_DOC_PATH;</div><div class="line">  <span class="built_in">BOOL</span> pathExist = [[<span class="built_in">NSFileManager</span> defaultManager] fileExistsAtPath:desPath];</div><div class="line">  <span class="keyword">if</span>(!pathExist)&#123;</div><div class="line">    [[<span class="built_in">NSFileManager</span> defaultManager] createDirectoryAtPath:desPath withIntermediateDirectories:<span class="literal">YES</span> attributes:<span class="literal">nil</span> error:<span class="literal">nil</span>];</div><div class="line">  &#125;</div><div class="line">  <span class="comment">//  NSLog(@"start unzip zip Path:%@",reload_zipPath);</span></div><div class="line">  [MXHZIPArchive unzipFileAtPath:reload_zipPath toDestination:desPath overwrite:<span class="literal">YES</span> password:<span class="literal">nil</span> error:&amp;error];</div><div class="line">  <span class="keyword">if</span>(!error)&#123;</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"解压成功,路径:%@"</span>,desPath);</div><div class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">  &#125;<span class="keyword">else</span>&#123;</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"解压失败,路径:%@，错误原因:%@"</span>,desPath,[error description]);</div><div class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="meta">#pragma mark 重新加载</span></div><div class="line">-(<span class="keyword">void</span>)reloadNow&#123;</div><div class="line">  [<span class="keyword">self</span>.bridge reload];</div><div class="line">  <span class="built_in">NSLog</span>(<span class="string">@"Bridge reload"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="built_in">NSString</span>*)getFilePath:(<span class="built_in">NSString</span>*)fileName&#123;</div><div class="line">  <span class="built_in">NSArray</span> *paths = <span class="built_in">NSSearchPathForDirectoriesInDomains</span>(<span class="built_in">NSDocumentDirectory</span>, <span class="built_in">NSUserDomainMask</span>, <span class="literal">YES</span>);</div><div class="line">  <span class="built_in">NSString</span> *documentsDirectory =[paths objectAtIndex:<span class="number">0</span>];</div><div class="line">  <span class="built_in">NSString</span> *filePath =[documentsDirectory stringByAppendingPathComponent:fileName];</div><div class="line">  <span class="keyword">return</span> filePath;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//AppDelegate中使用</span></div><div class="line"></div><div class="line"><span class="meta">#import <span class="meta-string">"AppDelegate.h"</span></span></div><div class="line"></div><div class="line"><span class="meta">#import <span class="meta-string">&lt;React/RCTBundleURLProvider.h&gt;</span></span></div><div class="line"><span class="meta">#import <span class="meta-string">&lt;React/RCTRootView.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#import <span class="meta-string">"HotUpdataManage.h"</span></span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">AppDelegate</span>()</span></div><div class="line"></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">strong</span>) RCTBridge *bridge;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">AppDelegate</span></span></div><div class="line"></div><div class="line">- (<span class="built_in">BOOL</span>)application:(<span class="built_in">UIApplication</span> *)application didFinishLaunchingWithOptions:(<span class="built_in">NSDictionary</span> *)launchOptions</div><div class="line">&#123;</div><div class="line">  HotUpdataManage* manage = [HotUpdataManage getInstance];</div><div class="line">  <span class="built_in">NSURL</span>* localUrl = <span class="literal">nil</span>;</div><div class="line">  <span class="meta">#ifdef  DEBUG</span></div><div class="line">    localUrl = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:<span class="string">@"index.ios"</span> fallbackResource:<span class="literal">nil</span>];</div><div class="line">  <span class="meta">#else</span></div><div class="line">    localUrl = [manage getBridge];</div><div class="line">  <span class="meta">#endif</span></div><div class="line">  <span class="comment">//使用bridge的方式创建rootView</span></div><div class="line">  _bridge = [[RCTBridge alloc] initWithBundleURL:localUrl moduleProvider:<span class="literal">nil</span> launchOptions:<span class="literal">nil</span>];</div><div class="line">  manage.bridge = _bridge;</div><div class="line">  </div><div class="line">  RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:_bridge moduleName:<span class="string">@"hotUpdataDemo"</span> initialProperties:<span class="literal">nil</span>];</div><div class="line">  </div><div class="line">  rootView.backgroundColor = [[<span class="built_in">UIColor</span> alloc] initWithRed:<span class="number">1.0</span>f green:<span class="number">1.0</span>f blue:<span class="number">1.0</span>f alpha:<span class="number">1</span>];</div><div class="line"></div><div class="line">  <span class="keyword">self</span>.window = [[<span class="built_in">UIWindow</span> alloc] initWithFrame:[<span class="built_in">UIScreen</span> mainScreen].bounds];</div><div class="line">  <span class="built_in">UIViewController</span> *rootViewController = [<span class="built_in">UIViewController</span> new];</div><div class="line">  rootViewController.view = rootView;</div><div class="line">  <span class="keyword">self</span>.window.rootViewController = rootViewController;</div><div class="line">  [<span class="keyword">self</span>.window makeKeyAndVisible];</div><div class="line">  </div><div class="line">  <span class="comment">//检查更新 这里使用的是阿里的rap mock接口</span></div><div class="line">  <span class="built_in">dispatch_async</span>(dispatch_get_global_queue(<span class="number">0</span>, <span class="number">0</span>), ^&#123;</div><div class="line">    [manage checkUpdate:<span class="string">@"http://rapapi.org/mockjsdata/13203/checkUpdate"</span>];</div><div class="line">  &#125;);</div><div class="line">  </div><div class="line">  <span class="keyword">return</span> <span class="literal">YES</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<blockquote>
+<p>后言</p>
+</blockquote>
+<p>包括pushy在内的许多支持增量热更新的类库,实际上只是对jsbundle文件进行了diff算法.</p>
+<p>图片是通过在服务器进行筛选获取新增或者更改的图片,然后与jsbundle的diff文件一同打包成一个压缩包给客户端进行热更新.</p>
+<p>本Demo采用的是对整个bundle.zip文件进行diff,直接获得一个针对旧版bundle.zip文件的热更新文件.</p>
+<p>iOS打包中,会默认将jsbundle和assest文件夹打入ipa包中,并不会将bundle.zip文件打入.</p>
+<p>这一块需要通过打包脚本来实现默认将bundle.zip打入ipa包内.</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/APP/">APP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React-Native/">React-Native</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/开发/">开发</a></li></ul>
+	</div>
+
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/09/07/React-Native 不使用第三方服务实现iOS&Android增量热更新/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2017/04/29/iOS开发 悬浮窗口播放器简单实现/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">iOS开发 悬浮窗口播放器简单实现</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+
+
+
+          </div>
+        </div>
+      </div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 Sandsyu
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+    <p class="copyright">本站总访问量 <span id="busuanzi_value_site_pv"></span> 次, 访客数 <span id="busuanzi_value_site_uv"></span> 人次, 本文总阅读量 <span id="busuanzi_value_page_pv"></span> 次</p>
+  </div>
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</footer>
+    </div>
+    <script>
+	var yiliaConfig = {
+		mathjax: false,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: "/",
+		innerArchive: true
+	}
+</script>
+
+<script src="/./main.js?v=4.0.0.js"></script>
+
+
+    
+<div class="tools-col" q-class="show:isShow,hide:isShow|isFalse" q-on="click:stop(e)">
+  <div class="tools-wrap">
+    
+    	<section class="tools-section tools-section-all" q-show="innerArchive">
+        <div class="search-wrap">
+          <input class="search-ipt" q-model="search" type="text" placeholder="find something…">
+          <i class="icon-search icon" q-show="search|isEmptyStr"></i>
+          <i class="icon-close icon" q-show="search|isNotEmptyStr" q-on="click:clearChose(e)"></i>
+        </div>
+        <div class="widget tagcloud search-tag">
+          <p class="search-tag-wording">tag:</p>
+          <label class="search-switch">
+            <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
+          </label>
+          <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">Appium</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">unittest</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">iOS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">测试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">服务端</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">APP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">React-Native</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">开发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">移动开发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">swift</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">移动端</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">app</a>
+              </li>
+            
+            <div class="clearfix"></div>
+          </ul>
+        </div>
+        <ul class="search-ul">
+          <p q-show="jsonFail" style="padding: 20px; font-size: 12px;">
+            缺失模块。<br/>1、在博客根目录（注意不是yilia根目录）执行以下命令：<br/> npm i hexo-generator-json-content --save<br/><br/>
+            2、在根目录_config.yml里添加配置：
+<pre style="font-size: 12px;" q-show="jsonFail">
+  jsonContent:
+    meta: false
+    pages: false
+    posts:
+      title: true
+      date: true
+      path: true
+      text: true
+      raw: false
+      content: false
+      slug: false
+      updated: false
+      comments: false
+      link: false
+      permalink: false
+      excerpt: false
+      categories: false
+      tags: true
+</pre>
+          </p>
+          <li class="search-li" q-repeat="items" q-show="isShow">
+            <a q-attr="href:path|urlformat" class="search-title"><i class="icon-quo-left icon"></i><span q-text="title"></span></a>
+            <p class="search-time">
+              <i class="icon-calendar icon"></i>
+              <span q-text="date|dateformat"></span>
+            </p>
+            <p class="search-tag">
+              <i class="icon-price-tags icon"></i>
+              <span q-repeat="tags" q-on="click:choseTag(e, name)" q-text="name|tagformat"></span>
+            </p>
+          </li>
+        </ul>
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-friends" q-show="friends">
+  		
+        <ul class="search-ul">
+          
+            <li class="search-li">
+              <a href="http://github.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>github</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://jianshu.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>简书</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="http://stackoverflow.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>stackoverflow</a>
+            </li>
+          
+            <li class="search-li">
+              <a href="https://segmentfault.com/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>segmentfault</a>
+            </li>
+          
+        </ul>
+  		
+    	</section>
+    
+
+    
+    	<section class="tools-section tools-section-me" q-show="aboutme">
+  	  	
+  	  		<div class="aboutme-wrap" id="js-aboutme">&lt;span style = &quot;color:rgba(254, 65, 65, 0);&quot;&gt; 隐约雷鸣 阴霾天空&lt;br/&gt;但盼风雨来 能留你在此.&lt;/span&gt;</div>
+  	  	
+    	</section>
+    
+  </div>
+  
+</div>
+    <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+  </div>
+  <script>
+  (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      if (curProtocol === 'https') {
+          bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+      }
+      else {
+          bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+      }
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+  })();
+</script>
+</body>
+</html>

@@ -153,30 +153,29 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-git使用实录 提交记录包含过大文件问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-React-Native 不使用第三方服务实现iOS&amp;Android增量热更新" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/29/git使用实录 提交记录包含过大文件问题/">git使用实录 文件过大无法提交问题解决</a>
+      <a class="article-title" href="/2017/09/07/React-Native 不使用第三方服务实现iOS&Android增量热更新/">React-Native 不使用第三方服务实现iOS&amp;Android增量热更新</a>
     </h1>
   
 
-        <a href="/2017/04/29/git使用实录 提交记录包含过大文件问题/" class="archive-article-date">
-  	<time datetime="2017-04-29T09:26:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-29</time>
+        <a href="/2017/09/07/React-Native 不使用第三方服务实现iOS&Android增量热更新/" class="archive-article-date">
+  	<time datetime="2017-09-07T06:08:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-07</time>
 </a>
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
         <blockquote>
-<p>前言</p>
+<p>流程图:<br>    <img src="http://oif61bzoy.bkt.clouddn.com/15047699265651.jpg" alt=""></p>
 </blockquote>
-<p>开发中遇到一个比较蛋疼的问题,因为新公司的项目是直播类型,集成网易的播放器SDK,静态库文件大小103MB超过了git提交文件的限制,且已经被我添加到commit记录中,等反应过来已经为时已晚.<br>不管是回滚还是删除对应文件亦或者添加忽略,提交时都会报文件过大的错误,记录一下自己解决的方法.<br>最后解决办法是先获取所有提交记录中大文件的列表,然后进行删除,因为涉及到对以往提交记录的修改,其实还是有一定风险的.</p>
         
-          <a class="article-more-a" href="/2017/04/29/git使用实录 提交记录包含过大文件问题/#more">more >></a>
+          <a class="article-more-a" href="/2017/09/07/React-Native 不使用第三方服务实现iOS&Android增量热更新/#more">more >></a>
         
       
 
@@ -187,14 +186,14 @@
       
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/APP/">APP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/APP/">APP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/React-Native/">React-Native</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/开发/">开发</a></li></ul>
 	</div>
 
       
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/04/29/git使用实录 提交记录包含过大文件问题/">展开全文 >></a>
+          <a class="article-more-a" href="/2017/09/07/React-Native 不使用第三方服务实现iOS&Android增量热更新/">展开全文 >></a>
         </p>
       
 
@@ -258,6 +257,65 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2017/04/29/iOS开发 悬浮窗口播放器简单实现/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
+    <article id="post-git使用实录 提交记录包含过大文件问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/29/git使用实录 提交记录包含过大文件问题/">git使用实录 文件过大无法提交问题解决</a>
+    </h1>
+  
+
+        <a href="/2017/04/29/git使用实录 提交记录包含过大文件问题/" class="archive-article-date">
+  	<time datetime="2017-04-29T09:26:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-29</time>
+</a>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>前言</p>
+</blockquote>
+<p>开发中遇到一个比较蛋疼的问题,因为新公司的项目是直播类型,集成网易的播放器SDK,静态库文件大小103MB超过了git提交文件的限制,且已经被我添加到commit记录中,等反应过来已经为时已晚.<br>不管是回滚还是删除对应文件亦或者添加忽略,提交时都会报文件过大的错误,记录一下自己解决的方法.<br>最后解决办法是先获取所有提交记录中大文件的列表,然后进行删除,因为涉及到对以往提交记录的修改,其实还是有一定风险的.</p>
+        
+          <a class="article-more-a" href="/2017/04/29/git使用实录 提交记录包含过大文件问题/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/APP/">APP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/git/">git</a></li></ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/04/29/git使用实录 提交记录包含过大文件问题/">展开全文 >></a>
         </p>
       
 
@@ -713,77 +771,6 @@
 
 
   
-    <article id="post-iOS开发-图形验证码绘图实例" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/22/iOS开发-图形验证码绘图实例/">iOS开发-图形验证码绘图实例</a>
-    </h1>
-  
-
-        <a href="/2016/12/22/iOS开发-图形验证码绘图实例/" class="archive-article-date">
-  	<time datetime="2016-12-22T06:05:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-22</time>
-</a>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>前言:</p>
-</blockquote>
-<p>公司项目需求获取短信验证码前需要输入图形验证码防止羊毛客使用脚本批量注册平台账号<br>想了想还是自己重新实现了一下.</p>
-<blockquote>
-<p>思路</p>
-</blockquote>
-<pre><code>1.容器创建
-    1.1 代码创建
-    1.2 nib文件使用 
-2.创建验证码字符串 
-2.绘图
-    2.1 绘字
-    2.2 绘干扰线 
-4.点击刷新机制
-</code></pre>
-        
-          <a class="article-more-a" href="/2016/12/22/iOS开发-图形验证码绘图实例/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/APP/">APP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/开发/">开发</a></li></ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/12/22/iOS开发-图形验证码绘图实例/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -872,11 +859,15 @@
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)">移动开发</a>
+                <a href="javascript:void(0)">React-Native</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)">开发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)">移动开发</a>
               </li>
              
               <li class="article-tag-list-item">
